@@ -7,13 +7,15 @@ import MainPage from './components/MainPage.tsx'
 import Login from './components/Login.tsx'
 import SignUp from './components/Signup.tsx'
 import App from './App.tsx'
+import Sign from './components/Sign.tsx'
+import PaymentModule from './components/PaymentModule.tsx'
 
 
 
 const router = createBrowserRouter([
   { 
     path : "/",
-    element : <App />,
+    element : <Sign/>,
     errorElement : <ErrorPage />,
   },
   { 
@@ -31,7 +33,6 @@ const router = createBrowserRouter([
     element : <MainPage />,
     errorElement : <ErrorPage />,
   }, 
-
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
