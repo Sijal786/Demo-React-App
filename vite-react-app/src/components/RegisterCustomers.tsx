@@ -31,7 +31,7 @@ function Copyright(props: any) {
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function RegisterCustomers() {
 
   const navigate = useNavigate();
 

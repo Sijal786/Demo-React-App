@@ -9,14 +9,23 @@ import SignUp from './components/Signup.tsx'
 import App from './App.tsx'
 import Sign from './components/Sign.tsx'
 import PaymentModule from './components/PaymentModule.tsx'
+import Navbar from './components/Navbar.tsx'
+import RegisterCustomers from './components/RegisterCustomers.tsx'
 
 
 
 const router = createBrowserRouter([
   { 
     path : "/",
-    element : <Sign/>,
+    element : <Navbar />,
     errorElement : <ErrorPage />,
+    children: [
+      {
+      path : "/mainpage",
+      element : <MainPage/>,
+      errorElement : <ErrorPage />,
+      }
+    ]
   },
   { 
     path : "/Login",
@@ -33,6 +42,11 @@ const router = createBrowserRouter([
     element : <MainPage />,
     errorElement : <ErrorPage />,
   }, 
+  { 
+    path : "/register",
+    element : <RegisterCustomers />,
+    errorElement : <ErrorPage />,
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

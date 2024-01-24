@@ -1,16 +1,13 @@
 import { AppBar, Toolbar, styled } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home';
 import Mail from '@mui/icons-material/Mail';
-import { Typography, Input , Badge } from '@mui/material';
+import { Typography, Badge } from '@mui/material';
 import { Stack, Box, } from '@mui/system';
 import Avatar from '@mui/material/Avatar';
-import { Link } from 'react-router-dom';
 import * as React from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
-import { AuthenticationContext } from '../App';
+import { Outlet, useNavigate } from "react-router-dom";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const StyledToolbar = styled(Toolbar)(() => ({
@@ -69,6 +66,8 @@ const Navbar = ({isAuthenticated, setIsAuthenticated}: any) => {
     
 
   return (
+    <>
+    
     <AppBar position='sticky'>
         <StyledToolbar> 
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
@@ -118,11 +117,14 @@ const Navbar = ({isAuthenticated, setIsAuthenticated}: any) => {
     )
   )
 ))}
-
             </Menu>
             </Stack>
         </StyledToolbar>
     </AppBar>
+    <div> 
+    <Outlet />
+    </div>
+    </>
   )
 }
 

@@ -1,25 +1,50 @@
 import { Button, Container, Typography, Grid, Card, CardMedia, CardContent, CardActions, Divider } from "@mui/material"
-import DeleteIcon from '@mui/icons-material/Delete';
 import { Stack } from "@mui/system";
-import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import { useEffect } from "react";
-import { AuthenticationContext } from "../App";
+import { useEffect, useState } from 'react';
+
 
 
 
 export default function MainPage({isAuthenticated, setIsAuthenticated} : any ) {
 
-    const cards = [1,2,3,4,5,6,7];
+    interface Product {
+        id: string;
+        name: string;
+        images: string[];
+        description : string;
+        
+      }
+
+    
     const navigate = useNavigate();
     console.log(isAuthenticated);
 
-   
+    const [products, setProducts] = useState<Product[]>([]);
+
+    const fetchProducts = async () => {
+        const options = {
+            headers: {
+                Authorization: "Bearer sk_test_51ObKZ9EVITF2DHVDd0JdpYldyhA0KprTa0SCVDpbYEvYgcmHA2U4D5D1GhNK6Jmkx2KlMJx5AbqJg6AK4bYdfy8N00oYG9nrmT"
+            }
+        }
+      const response = await fetch('https://api.stripe.com/v1/products', options as any); 
+      const data = await response.json();
+      console.log("data for products: ", data.data)
+      setProducts(data.data);
+    };
+  
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+   console.log(products);
 
 //   useEffect(() => {
 //     setIsAuthenticated(!!localStorage.getItem("token"));
 //   }, [isAuthenticated]); 
+
 
 function handleLogout(){
     localStorage.removeItem("token");
@@ -39,8 +64,8 @@ function handleLogout(){
                 Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.
                 </Typography>
                 <Stack direction= {{xs : "column" ,md : "row"}} useFlexGap spacing={2} flexWrap="wrap" justifyContent="center" alignItems='center' divider = {<Divider orientation="vertical" flexItem />}> 
-                    <Button variant="outlined" > 
-                        Home
+                    <Button variant="outlined" onClick={() => navigate("/register")} > 
+                        Subscribe
                     </Button>
                     {isAuthenticated ? <Button variant="outlined" onClick={handleLogout}> 
                         Logout
@@ -52,23 +77,23 @@ function handleLogout(){
             </div>
             <Container style={{ padding : '20px 0px'}} maxWidth = "md">
                 <Grid container maxWidth="md" style={{ marginTop : '10px'}} spacing={4}>
-                    {cards.map((card) => (
-                        <Grid key = {card}item xs = {12} sm = {6} md = {4} >
+                    {products.map((product ) => (
+                        <Grid key = {product.id}item xs = {12} sm = {6} md = {4} >
                         <Card style={{ display: 'flex' , flexDirection : "column", height  :"100%"}}  >
-                            <CardMedia style={{ paddingTop : '56.25%'}}
-                            image = "https://source.unsplash.com/random?wallpapers"
-                            title = "Image title"
+                            <CardMedia style={{ paddingTop : '56.25%'}} sx ={{height : "90px"}}
+                            image = {product.images[0]}
+                            title = {product.id}
                             />    
                            <CardContent style={{flexGrow : "1"}} >
-                            <Typography variant = "h5"  >
-                                Heading
+                            <Typography variant = "h4"  >
+                                {product.name}
                             </Typography>
                             <Typography>
-                                This is my card that i am showing on the screen so that i can describe what my card looks like
+                               {product.description}
                             </Typography>
                            </CardContent>
                            <CardActions>
-                            <Button variant="contained" color = "primary" size = "small" >Login to Subscribe</Button>
+                            <Button variant="contained" color = "primary" size = "small" >Subscribe</Button>
                             
                            </CardActions>
                         </Card>
