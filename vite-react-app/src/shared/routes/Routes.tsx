@@ -1,8 +1,8 @@
 export const Routes = {
-    Home : "/",
-    Login : "/Login",
-    SignUp : "/signup",
-    MainPage : "/mainpage",
-    Register : "/register"
-
-}
+  Home: "/",
+  Login: "/Login",
+  SignUp: "/signup",
+  MainPage: "/mainpage",
+  Register: "/register",
+  ProductDetails: "/productdetails/:id",
+};

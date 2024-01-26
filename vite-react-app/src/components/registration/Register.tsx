@@ -53,7 +53,7 @@ export default function MyForm() {
         console.log("The customer is registered successfully")
       };
       
-
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">

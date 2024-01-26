@@ -45,13 +45,9 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }: any) => {
   const settings = ["Profile", "Login", "Logout"];
 
   const { search, setSearch } = useContext(SearchContext);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
-  console.log("========searchContext", search);
-
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
-
+  
   function handleUserMenuClick(setting: string): void {
     if (setting == "Logout") {
       localStorage.removeItem("token");

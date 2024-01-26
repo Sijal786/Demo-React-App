@@ -91,34 +91,36 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
           >
             {filteredProducts?.map((product: any) => (
               <Grid key={product.id} item xs={12} sm={6} md={4}>
-                <Card
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                  }}
-                >
-                  <CardMedia
-                    style={{ paddingTop: "56.25%" }}
-                    sx={{ height: "90px" }}
-                    image={product.images[0]}
-                    title={product.id}
-                  />
-                  <CardContent style={{ flexGrow: "1" }}>
-                    <Typography variant="h4">{product.name}</Typography>
-                    <Typography>{product.description}</Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      onClick={() => navigate(Routes.Register)}
-                    >
-                      Subscribe
-                    </Button>
-                  </CardActions>
-                </Card>
+                  <Card
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    }}
+                    onClick={() => navigate(`${Routes.ProductDetails.replace(":id", product.id)}`)}
+                  >
+                    <CardMedia
+                      style={{ paddingTop: "56.25%" }}
+                      sx={{ height: "90px" }}
+                      image={product.images[0]}
+                      title={product.id}
+                    />
+                    <CardContent style={{ flexGrow: "1" }}>
+                      <Typography variant="h4">{product.name}</Typography>
+                      <Typography>{product.description}</Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        onClick={() => navigate(Routes.Register)}
+                      >
+                        Subscribe
+                      </Button>
+                    </CardActions>
+                  </Card>
+                
               </Grid>
             ))}
           </Grid>

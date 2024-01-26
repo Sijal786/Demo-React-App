@@ -9,7 +9,8 @@ import SignUp from "./components/authentication/Signup.tsx";
 import Register from "./components/registration/Register.tsx";
 import App from "./App.tsx";
 import { Routes } from "./shared/routes/Routes.tsx";
-import  { ProductProvider } from "./components/context/ProductContext.tsx";
+import { ProductProvider } from "./components/context/ProductContext.tsx";
+import ProductDetails from "./components/ProductDetails.tsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,11 @@ const router = createBrowserRouter([
   {
     path: Routes.Register,
     element: <Register />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: Routes.ProductDetails,
+    element: <ProductDetails />,
     errorElement: <ErrorPage />,
   },
 ]);
