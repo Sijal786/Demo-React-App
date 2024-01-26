@@ -1,56 +1,46 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
-import ErrorPage from './ErrorPage.tsx'
-import MainPage from './components/MainPage.tsx'
-import Login from './components/Login.tsx'
-import SignUp from './components/Signup.tsx'
-import App from './App.tsx'
-import Sign from './components/Sign.tsx'
-import PaymentModule from './components/PaymentModule.tsx'
-import Navbar from './components/Navbar.tsx'
-import RegisterCustomers from './components/RegisterCustomers.tsx'
-
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import { createBrowserRouter, RouterProvider, } from "react-router-dom";
+import ErrorPage from "./components/ErrorPage.tsx";
+import MainPage from "./components/MainPage.tsx";
+import Login from "./components/authentication/Login.tsx";
+import SignUp from "./components/authentication/Signup.tsx";
+import Register from "./components/registration/Register.tsx";
+import App from "./App.tsx";
+import { Routes } from "./shared/routes/Routes.tsx";
 
 
 const router = createBrowserRouter([
-  { 
-    path : "/",
-    element : <Navbar />,
-    errorElement : <ErrorPage />,
-    children: [
-      {
-      path : "/mainpage",
-      element : <MainPage/>,
-      errorElement : <ErrorPage />,
-      }
-    ]
+  {
+    path: Routes.Home,
+    element: <App />,
+    errorElement: <ErrorPage />,
   },
-  { 
-    path : "/Login",
-    element : <Login/>,
-    errorElement : <ErrorPage />,
+  {
+    path: Routes.Login,
+    element: <Login />,
+    errorElement: <ErrorPage />,
   },
-  { 
-    path : "/signup",
-    element : <SignUp />,
-    errorElement : <ErrorPage />,
-  }, 
-  { 
-    path : "/mainpage",
-    element : <MainPage />,
-    errorElement : <ErrorPage />,
-  }, 
-  { 
-    path : "/register",
-    element : <RegisterCustomers />,
-    errorElement : <ErrorPage />,
+  {
+    path: Routes.SignUp,
+    element: <SignUp />,
+    errorElement: <ErrorPage />,
   },
-])
+  {
+    path: Routes.MainPage,
+    element: <MainPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: Routes.Register,
+    element: <Register />,
+    errorElement: <ErrorPage />,
+  },
+]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

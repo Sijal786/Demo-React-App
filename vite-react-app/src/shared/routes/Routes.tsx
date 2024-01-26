@@ -3,6 +3,6 @@ export const Routes = {
     Login : "/Login",
     SignUp : "/signup",
     MainPage : "/mainpage",
-    Regiter : "/register"
+    Register : "/register"
 
 }
