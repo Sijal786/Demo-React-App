@@ -1,18 +1,41 @@
-import { Button, Container, Typography, Grid, Card, CardMedia, CardContent, CardActions, Divider, } from "@mui/material";
+import {
+  Button,
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Divider,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../shared/routes/Routes";
+import { useContext } from "react";
+import { ProductContext } from "./context/ProductContext";
+import { ProductContextType } from "./context/ProductContext";
+import { SearchContext } from "./context/SearchContext";
 
-export default function MainPage({ isAuthenticated, setIsAuthenticated, products, }: any) {
-
+export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
   const navigate = useNavigate();
+  const { search } = useContext(SearchContext);
+
+  console.log("====mainpage", search);
   console.log(isAuthenticated);
+
+  const contextValue: ProductContextType | undefined =
+    useContext(ProductContext);
+  const products = contextValue?.products;
 
   function handleLogout() {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
   }
 
+  const filteredProducts = products?.filter((product) =>
+    product.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <>
       <main>
@@ -35,11 +58,26 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated, products
               alignItems="center"
               divider={<Divider orientation="vertical" flexItem />}
             >
-              <Button variant="outlined" onClick={() => navigate(Routes.Register)} > Subscribe </Button>
+              <Button
+                variant="outlined"
+                onClick={() => navigate(Routes.Register)}
+              >
+                {" "}
+                Subscribe{" "}
+              </Button>
               {isAuthenticated ? (
-                <Button variant="outlined" onClick={handleLogout}> Logout </Button>
+                <Button variant="outlined" onClick={handleLogout}>
+                  {" "}
+                  Logout{" "}
+                </Button>
               ) : (
-                <Button variant="outlined" onClick={() => navigate(Routes.Login)} > Login </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate(Routes.Login)}
+                >
+                  {" "}
+                  Login{" "}
+                </Button>
               )}
             </Stack>
           </Container>
@@ -51,7 +89,7 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated, products
             style={{ marginTop: "10px" }}
             spacing={4}
           >
-            {products.map((product: any) => (
+            {filteredProducts?.map((product: any) => (
               <Grid key={product.id} item xs={12} sm={6} md={4}>
                 <Card
                   style={{

@@ -15,7 +15,9 @@ import {
 } from "../shared/styled/Styled";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useContext } from "react";
+import { Outlet } from "react-router-dom";
+import { SearchContext } from "./context/SearchContext";
 
 const StyledToolbar = styled(Toolbar)(() => ({
   display: "flex",
@@ -38,15 +40,14 @@ const UserBox = styled(Box)(() => ({
   marginLeft: "15px",
 }));
 
-const Navbar = ({
-  isAuthenticated,
-  setIsAuthenticated,
-  products,
-  setProducts,
-}: any) => {
+const Navbar = ({ isAuthenticated, setIsAuthenticated }: any) => {
   const naviagte = useNavigate();
   const settings = ["Profile", "Login", "Logout"];
-  const [search, setSearch] = useState<string>("");
+
+  const { search, setSearch } = useContext(SearchContext);
+
+  console.log("========searchContext", search);
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -66,14 +67,6 @@ const Navbar = ({
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-  };
-
-  const handleSearch = (value: string) => {
-    setSearch(value);
-    console.log(value);
-    // setProducts(
-    //   products.filter((item: any) => item.name.toLowerCase() == value)
-    // );
   };
 
   return (
@@ -96,7 +89,7 @@ const Navbar = ({
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
                 value={search}
-                onChange={(e) => handleSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </Search>
           </Stack>
@@ -143,6 +136,9 @@ const Navbar = ({
           </Stack>
         </StyledToolbar>
       </AppBar>
+      <div>
+        <Outlet />
+      </div>
     </>
   );
 };

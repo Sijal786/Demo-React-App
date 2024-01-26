@@ -24,7 +24,6 @@ export default function MyForm() {
               name: name,
               email: email,
               phone : phone,
-              
             }),
           });
       
@@ -104,7 +103,6 @@ export default function MyForm() {
               id="phone"
               autoComplete="phone"
             />
-            
             <Button
               type="submit"
               fullWidth

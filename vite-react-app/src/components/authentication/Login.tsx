@@ -36,6 +36,7 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+  console.log("sign in ");
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -86,7 +87,10 @@ export default function Login() {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5"> Sign in </Typography>
+          <Typography component="h1" variant="h5">
+            {" "}
+            Sign in{" "}
+          </Typography>
           <Box
             component="form"
             onSubmit={handleSubmit}
