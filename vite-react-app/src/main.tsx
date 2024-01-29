@@ -9,8 +9,8 @@ import SignUp from "./components/authentication/Signup.tsx";
 import Register from "./components/registration/Register.tsx";
 import App from "./App.tsx";
 import { Routes } from "./shared/routes/Routes.tsx";
-import { ProductProvider } from "./components/context/ProductContext.tsx";
 import ProductDetails from "./components/ProductDetails.tsx";
+import { CartProvider } from "./components/context/CartContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -47,8 +47,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ProductProvider>
+    <CartProvider>
       <RouterProvider router={router} />
-    </ProductProvider>
+    </CartProvider>
   </React.StrictMode>
 );

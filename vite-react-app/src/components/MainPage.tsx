@@ -13,8 +13,8 @@ import { Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../shared/routes/Routes";
 import { useContext } from "react";
-import { ProductContext } from "./context/ProductContext";
-import { ProductContextType } from "./context/ProductContext";
+import { ProductContext } from "../App";
+import { ProductContextType } from "../App";
 import { SearchContext } from "./context/SearchContext";
 
 export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
@@ -41,8 +41,8 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
       <main>
         <div>
           <Container maxWidth="sm">
-            <Typography variant="h2" align="center" gutterBottom>
-              Stripe Products
+            <Typography variant="h2" align="center" gutterBottom mt={4}>
+              WELCOME
             </Typography>
             <Typography variant="h5" align="center" paragraph>
               Something short and leading about the collection below—its
@@ -91,13 +91,13 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
           >
             {filteredProducts?.map((product: any) => (
               <Grid key={product.id} item xs={12} sm={6} md={4}>
-                  <Card
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      height: "100%",
-                    }}
-                    onClick={() => navigate(`${Routes.ProductDetails.replace(":id", product.id)}`)}
+                <Card
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                  }}
+                  onClick={() => navigate(`${Routes.ProductDetails.replace(":id", product.id)}`, { state: { product } })}
                   >
                     <CardMedia
                       style={{ paddingTop: "56.25%" }}
@@ -114,7 +114,7 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
                         variant="contained"
                         color="primary"
                         size="small"
-                        onClick={() => navigate(Routes.Register)}
+                        onClick={() => navigate(`${Routes.ProductDetails.replace(":id", product.id)}`, { state: { product } })}
                       >
                         Subscribe
                       </Button>
