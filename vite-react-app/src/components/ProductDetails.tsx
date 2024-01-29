@@ -1,6 +1,4 @@
 import { useContext } from "react";
-import { useParams } from "react-router-dom";
-import { ProductContext } from "../App";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
