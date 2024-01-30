@@ -6,7 +6,7 @@ import ErrorPage from "./components/ErrorPage.tsx";
 import MainPage from "./components/MainPage.tsx";
 import Login from "./components/authentication/Login.tsx";
 import SignUp from "./components/authentication/Signup.tsx";
-import Register from "./components/registration/Register.tsx";
+import Register from "./components/subscription/Register.tsx";
 import App from "./App.tsx";
 import { Routes } from "./shared/routes/Routes.tsx";
 import ProductDetails from "./components/ProductDetails.tsx";

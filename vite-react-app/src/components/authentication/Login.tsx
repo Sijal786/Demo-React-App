@@ -14,24 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { Copyright } from "../../shared/components/Copyright";
 
 const defaultTheme = createTheme();
 
@@ -66,6 +49,8 @@ export default function Login() {
       const response = await axios.request(options);
       console.log(response.data.token);
       localStorage.setItem("token", String(response.data.token));
+      localStorage.setItem("email", String(data.get("email")));
+      localStorage.setItem("password", String(data.get("password")));
       navigate("/");
     } catch (error) {
       console.error(error);

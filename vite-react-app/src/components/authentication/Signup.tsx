@@ -12,29 +12,15 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { v4 as uuidv4 } from "uuid";
+import { Routes } from "../../shared/routes/Routes";
+import { Copyright } from "../../shared/components/Copyright";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const uniqueRoleId = uuidv4();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,14 +42,15 @@ export default function SignUp() {
       data: JSON.stringify({
         email: data.get("email"),
         password: data.get("password"),
-        role: "Your_dgtdgtdgdggdrhjjjjjjjk55kkhkhhole",
+        role: uniqueRoleId,
       }),
     };
 
     try {
       const response = await axios.request(options);
       console.log(response.data);
-      navigate("/");
+      console.log("Sign up successfully");
+      navigate(Routes.Login)
     } catch (error) {
       console.error(error);
     }
@@ -84,7 +71,10 @@ export default function SignUp() {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5"> Sign Up </Typography>
+          <Typography component="h1" variant="h5">
+            {" "}
+            Sign Up{" "}
+          </Typography>
           <Box
             component="form"
             onSubmit={handleSubmit}
