@@ -14,18 +14,14 @@ import { useNavigate } from "react-router-dom";
 import { Routes } from "../shared/routes/Routes";
 import { useContext } from "react";
 import { ProductContext } from "../App";
-import { ProductContextType } from "../App";
+import { ProductContextType } from "../shared/interfaces/Interface";
 import { SearchContext } from "./context/SearchContext";
 
 export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
+
   const navigate = useNavigate();
   const { search } = useContext(SearchContext);
-
-  console.log("====mainpage", search);
-  console.log(isAuthenticated);
-
-  const contextValue: ProductContextType | undefined =
-    useContext(ProductContext);
+  const contextValue: ProductContextType | undefined = useContext(ProductContext);
   const products = contextValue?.products;
 
   function handleLogout() {
@@ -33,9 +29,6 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
     setIsAuthenticated(false);
   }
 
-  const filteredProducts = products?.filter((product) =>
-    product.name.toLowerCase().includes(search.toLowerCase())
-  );
   return (
     <>
       <main>
@@ -89,7 +82,8 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
             style={{ marginTop: "10px" }}
             spacing={4}
           >
-            {filteredProducts?.map((product: any) => (
+            {products?.filter((product) => product.name.toLowerCase().includes(search.toLowerCase()))
+              .map((product: any) => (
               <Grid key={product.id} item xs={12} sm={6} md={4}>
                 <Card
                   style={{
@@ -102,7 +96,7 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
                     <CardMedia
                       style={{ paddingTop: "56.25%" }}
                       sx={{ height: "90px" }}
-                      image={product.images[0]}
+                      image={product.images[0] || "fallback_image_url.jpg"}
                       title={product.id}
                     />
                     <CardContent style={{ flexGrow: "1" }}>

@@ -8,11 +8,7 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
-import {
-  Search,
-  SearchIconWrapper,
-  StyledInputBase,
-} from "../shared/styled/Styled";
+import {Search, SearchIconWrapper ,StyledInputBase, } from "../shared/styled/Styled";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";

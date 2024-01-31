@@ -6,11 +6,12 @@ import ErrorPage from "./components/ErrorPage.tsx";
 import MainPage from "./components/MainPage.tsx";
 import Login from "./components/authentication/Login.tsx";
 import SignUp from "./components/authentication/Signup.tsx";
-import Register from "./components/subscription/Register.tsx";
+import RegisterCustomers from "./components/subscription/RegisterCustomet.tsx";
 import App from "./App.tsx";
 import { Routes } from "./shared/routes/Routes.tsx";
 import ProductDetails from "./components/ProductDetails.tsx";
 import { CartProvider } from "./components/context/CartContext.tsx";
+import Checkout from "./components/subscription/Checkout.tsx";
 
 const router = createBrowserRouter([
   {
@@ -35,12 +36,17 @@ const router = createBrowserRouter([
   },
   {
     path: Routes.Register,
-    element: <Register />,
+    element: <RegisterCustomers />,
     errorElement: <ErrorPage />,
   },
   {
     path: Routes.ProductDetails,
     element: <ProductDetails />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: Routes.Checkout,
+    element: <Checkout />,
     errorElement: <ErrorPage />,
   },
 ]);

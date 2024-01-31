@@ -5,4 +5,5 @@ export const Routes = {
   MainPage: "/mainpage",
   Register: "/register",
   ProductDetails: "/productdetails/:id",
+  Checkout : "/checkout"
 };
