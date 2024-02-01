@@ -16,9 +16,7 @@ const PricingComponent = ({ pricing }: { pricing: any[] }) => {
   const navigate = useNavigate();
 
   const handleSubscribe = async () => {
-
-
-    navigate(Routes.Checkout)
+    navigate(Routes.Checkout);
     // const customerEmail = localStorage.getItem("email");
     // console.log("======Customer Email", customerEmail);
 
@@ -37,7 +35,6 @@ const PricingComponent = ({ pricing }: { pricing: any[] }) => {
     //   console.log("The customer does not exist");
     // }
   };
-
 
   return (
     <div>
@@ -105,8 +102,12 @@ const PricingComponent = ({ pricing }: { pricing: any[] }) => {
                   </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: "center" }}>
-                  <Button fullWidth variant="contained" color="primary"
-                  onClick={() => handleSubscribe()}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleSubscribe()}
+                  >
                     Subscribe
                   </Button>
                 </CardActions>

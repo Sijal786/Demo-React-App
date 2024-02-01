@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { Routes } from "../../shared/routes/Routes";
 import { Copyright } from "../../shared/components/Copyright";
+import { useUserRegistration } from "../../hooks/useUserRegistration";
 
 const defaultTheme = createTheme();
 
@@ -30,30 +31,14 @@ export default function SignUp() {
       password: data.get("password"),
     });
 
-    const options = {
-      method: "POST",
-      url: "https://jwt-bearer-auth1.p.rapidapi.com/register",
-      headers: {
-        "content-type": "application/json",
-        "Content-Type": "application/json",
-        "X-RapidAPI-Key": "5190cdf797mshe5f92a18298a6cbp1d1edfjsnaff3e2eee45e",
-        "X-RapidAPI-Host": "jwt-bearer-auth1.p.rapidapi.com",
-      },
-      data: JSON.stringify({
-        email: data.get("email"),
-        password: data.get("password"),
-        role: uniqueRoleId,
-      }),
-    };
+    
 
-    try {
-      const response = await axios.request(options);
-      console.log(response.data);
-      console.log("Sign up successfully");
-      navigate(Routes.Login)
-    } catch (error) {
-      console.error(error);
-    }
+    
+      // const {data} = useUserRegistration(email, password, uniqueRoleId )
+      // console.log(response.data);
+      // console.log("Sign up successfully");
+      // navigate(Routes.Login)
+    
   };
 
   return (
