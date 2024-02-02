@@ -9,31 +9,36 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../shared/routes/Routes";
-
+import { Product } from "../../shared/interfaces/Interface";
 import { getAPIResult } from "../../services/axios";
 
-const PricingComponent = ({ pricing }: { pricing: any[] }) => {
+const PricingComponent = ({ pricing, product }: { pricing: any[], product : Product }) => {
   const navigate = useNavigate();
+  console.log("======Product from Pricing", product);
+  const handleSubscribe = async (id : string) => {
+    
+    const customerEmail = localStorage.getItem("email");
+    console.log("======Customer Email", customerEmail);
 
-  const handleSubscribe = async () => {
-    navigate(Routes.Checkout);
-    // const customerEmail = localStorage.getItem("email");
-    // console.log("======Customer Email", customerEmail);
+    const url = "https://api.stripe.com/v1/customers";
+    const data = await getAPIResult(url);
 
-    // const url = "https://api.stripe.com/v1/customers";
-    // const data = await getAPIResult(url);
+    console.log("======Customers", data);
 
-    // console.log("======Customers", data);
+    const matchingCustomer = data.find(
+      (customer: any) => customer.email == customerEmail
+    );
+    console.log(matchingCustomer);
 
-    // const matchingCustomer = data.find(
-    //   (customer: any) => customer.email == customerEmail
-    // );
-    // console.log(matchingCustomer);
-    // if (!!matchingCustomer) {
-    //   console.log("The customer exist ");
-    // } else {
-    //   console.log("The customer does not exist");
-    // }
+    const price = pricing.find((price) => price.id == id); 
+    console.log("======Price that user wants to subscribe" , price )
+    if (!!matchingCustomer) {
+      navigate(Routes.Checkout, { state: { product, pricing, matchingCustomer } });
+      console.log("The customer exist ");
+    } else {
+      console.log("The customer does not exist");
+      navigate(Routes.Register);
+    }
   };
 
   return (
@@ -106,7 +111,7 @@ const PricingComponent = ({ pricing }: { pricing: any[] }) => {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    onClick={() => handleSubscribe()}
+                    onClick={() => handleSubscribe(price.id)}
                   >
                     Subscribe
                   </Button>

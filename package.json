@@ -3,6 +3,7 @@
     "@types/node": "^20.11.5"
   },
   "dependencies": {
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "react-stripe-elements": "^6.1.2"
   }
 }

@@ -9,17 +9,15 @@ import { createContext } from "react";
 import { Product } from "./shared/interfaces/Interface";
 import { getAPIResult } from "./services/axios";
 import { ProductContextType } from "./shared/interfaces/Interface";
-import { QueryClientProvider, QueryClient } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
 
-
-const queryClient = new QueryClient()
-
-
-export const ProductContext = createContext<ProductContextType | undefined>(undefined);
+export const ProductContext = createContext<ProductContextType | undefined>(
+  undefined
+);
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"))
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem("token")
+  );
   const [products, setProducts] = useState([] as Product[]);
 
   const productContext: ProductContextType = {
@@ -40,7 +38,6 @@ export default function App() {
 
   return (
     <>
-      <QueryClientProvider client={queryClient} >
       <ProductContext.Provider value={productContext}>
         <SearchProvider>
           <Navbar
@@ -51,11 +48,8 @@ export default function App() {
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
           />
-          </SearchProvider>
-          
-        </ProductContext.Provider>
-        <ReactQueryDevtools initialIsOpen = {false} position = 'bottom-right' />
-        </QueryClientProvider>
+        </SearchProvider>
+      </ProductContext.Provider>
     </>
   );
 }

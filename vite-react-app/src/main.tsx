@@ -12,6 +12,9 @@ import { Routes } from "./shared/routes/Routes.tsx";
 import ProductDetails from "./components/ProductDetails.tsx";
 import { CartProvider } from "./components/context/CartContext.tsx";
 import Checkout from "./components/subscription/Checkout.tsx";
+import { QueryClientProvider, QueryClient } from "react-query";
+import { ReactQueryDevtools } from 'react-query/devtools'
+
 
 const router = createBrowserRouter([
   {
@@ -51,10 +54,16 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <CartProvider>
-      <RouterProvider router={router} />
-    </CartProvider>
+    <QueryClientProvider client={queryClient}>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+      <ReactQueryDevtools initialIsOpen = {false} position = 'bottom-right' />
+      </QueryClientProvider>
+   
   </React.StrictMode>
 );

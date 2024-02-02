@@ -33,7 +33,6 @@ const ProductDetails = () => {
 
   console.log("======Pricing", pricing);
 
-  
   const defaultTheme = createTheme();
 
   return (
@@ -68,7 +67,7 @@ const ProductDetails = () => {
         <img src={product.images[0]} alt="This is my image" />
       </Container>
       
-      <PricingComponent pricing={pricing} />
+      <PricingComponent pricing={pricing} product={ product } />
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles
           styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}
