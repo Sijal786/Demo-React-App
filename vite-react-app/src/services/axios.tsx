@@ -26,12 +26,10 @@ export const postAPIResult = async (url: string, postData: any) => {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
-    const result = response.data;
-    const data = result.data;
-    return data;
+     const result = response.data;
+     console.log("The post Api Data Response ", result);
+     return result;
   } catch (error) {
     return error;
   }
 };
-
-

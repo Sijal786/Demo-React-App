@@ -6,7 +6,7 @@ import ErrorPage from "./components/ErrorPage.tsx";
 import MainPage from "./components/MainPage.tsx";
 import Login from "./components/authentication/Login.tsx";
 import SignUp from "./components/authentication/Signup.tsx";
-import RegisterCustomers from "./components/subscription/RegisterCustomet.tsx";
+import Registration from "./components/subscription/Registration.tsx";
 import App from "./App.tsx";
 import { Routes } from "./shared/routes/Routes.tsx";
 import ProductDetails from "./components/ProductDetails.tsx";
@@ -14,6 +14,8 @@ import { CartProvider } from "./components/context/CartContext.tsx";
 import Checkout from "./components/subscription/Checkout.tsx";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools'
+import UpdateSubscription from "./components/subscription/UpdateSubscription.tsx";
+import ShowAlllSubscriptions from "./components/subscription/ShowAlllSubscriptions.tsx";
 
 
 const router = createBrowserRouter([
@@ -39,7 +41,7 @@ const router = createBrowserRouter([
   },
   {
     path: Routes.Register,
-    element: <RegisterCustomers />,
+    element: <Registration />,
     errorElement: <ErrorPage />,
   },
   {
@@ -50,6 +52,16 @@ const router = createBrowserRouter([
   {
     path: Routes.Checkout,
     element: <Checkout />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: Routes.UpdateSubscription,
+    element: <UpdateSubscription />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: Routes.ShowAllSubscriptions,
+    element: <ShowAlllSubscriptions />,
     errorElement: <ErrorPage />,
   },
 ]);
@@ -64,6 +76,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       </CartProvider>
       <ReactQueryDevtools initialIsOpen = {false} position = 'bottom-right' />
       </QueryClientProvider>
-   
   </React.StrictMode>
 );

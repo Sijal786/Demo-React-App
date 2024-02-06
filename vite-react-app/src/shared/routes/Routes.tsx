@@ -5,5 +5,7 @@ export const Routes = {
   MainPage: "/mainpage",
   Register: "/register",
   ProductDetails: "/productdetails/:id",
-  Checkout : "/checkout"
+  Checkout : "/checkout",
+  UpdateSubscription: "/updateSubscription",
+  ShowAllSubscriptions: "/showAllSubscriptions"
 };
