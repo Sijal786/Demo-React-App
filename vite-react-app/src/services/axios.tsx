@@ -33,5 +33,3 @@ export const postAPIResult = async (url: string, postData: any) => {
     return error;
   }
 };
-
-

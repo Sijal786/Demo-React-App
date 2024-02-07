@@ -1,5 +1,3 @@
-
-
 const getCustomerCredentialsFromLocalStorage = () => {
     const customerId = localStorage.getItem("CustomerID");
     const customerName = localStorage.getItem("CustomerName");

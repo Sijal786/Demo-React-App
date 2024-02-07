@@ -16,6 +16,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Copyright } from "../../shared/components/Copyright";
 import { Routes } from "../../shared/routes/Routes";
+import setUserSignInInLocalStorage from "../../shared/helper/setUserSignInDataInLocalStorage";
 
 const defaultTheme = createTheme();
 
@@ -49,7 +50,10 @@ export default function Login() {
     try {
       const response = await axios.request(options);
       console.log(response.data.token);
-      localStorage.setItem("token", String(response.data.token));
+      const userData = {
+        token : String(response.data.token)
+      }
+      localStorage.setItem("token", );
       localStorage.setItem("email", String(data.get("email")));
       localStorage.setItem("password", String(data.get("password")));
       navigate("/");

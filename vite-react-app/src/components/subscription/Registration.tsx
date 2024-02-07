@@ -4,7 +4,7 @@ import { Toolbar } from "@mui/material";
 import { Stack, containerClasses } from "@mui/system";
 import { useContext, useState } from "react";
 import { styled } from '@mui/system';
-import AddCutomerDetails from "./AddCutomerDetails";
+import AddCutomerDetails from "./AddCustomerDetails";
 import AddCardDetails from "./AddCardDetails";
 
 

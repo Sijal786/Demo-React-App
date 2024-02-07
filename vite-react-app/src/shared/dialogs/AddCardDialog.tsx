@@ -26,7 +26,6 @@ const Transition = React.forwardRef(function Transition(
 });
 
 
-
 const AddCardDialog = ({handleClose, open} : any) => {
 
   const stripe = useStripe();

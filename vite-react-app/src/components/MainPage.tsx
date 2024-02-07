@@ -21,11 +21,15 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
 
   const navigate = useNavigate();
   const { search } = useContext(SearchContext);
-  const contextValue: ProductContextType | undefined = useContext(ProductContext);
-  const products = contextValue?.products;
+  const products : any = useContext(ProductContext);
+  console.log("Context vallue ", products);
+  
+  console.log("products from page main", products);
 
   function handleLogout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("email");
+
     setIsAuthenticated(false);
   }
 
@@ -82,7 +86,7 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
             style={{ marginTop: "10px" }}
             spacing={4}
           >
-            {products?.filter((product) => product.name.toLowerCase().includes(search.toLowerCase()))
+            {products?.filter((product : any) => product.name.toLowerCase().includes(search.toLowerCase()))
               .map((product: any) => (
               <Grid key={product.id} item xs={12} sm={6} md={4}>
                 <Card

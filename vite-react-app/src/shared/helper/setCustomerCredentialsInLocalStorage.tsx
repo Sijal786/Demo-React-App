@@ -1,4 +1,3 @@
-
 const setCustomerCredentialsInLocalStorage = (customerData : any ) => {
     localStorage.setItem("CustomerID" , customerData.customerId);
     localStorage.setItem("CustomerName" , customerData?.customerName);

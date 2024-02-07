@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import { getAPIResult } from '../../services/axios';
 import { useEffect } from 'react';
 import ShowPriceTable from './ShowPriceTable';
-import { Button, Grid, Container, Typography, Card, CardContent, CardActions} from '@mui/material';
+import { Button, Grid, Container, Typography, Card} from '@mui/material';
 
 const UpdateSubscription = () => {
 
