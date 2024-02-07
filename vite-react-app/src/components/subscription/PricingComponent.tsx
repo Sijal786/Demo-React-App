@@ -1,17 +1,33 @@
-import {
-  Container,
-  Grid,
-  Typography,
-  Card,
-} from "@mui/material";
-
-import { Product } from "../../shared/interfaces/Interface";
+import { Container, Grid, Typography, Card } from "@mui/material";
 import ShowPriceTable from "./ShowPriceTable";
+import { useFetchProductPricing } from "../../hooks/useFetchPricing";
+import { useState } from "react";
+import Loading from "../../shared/components/Loading";
+import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
+import { useEffect } from "react";
 
-const PricingComponent = ({ pricing, product }: { pricing: any[], product : Product }) => {
- 
-  console.log("======Product from Pricing", product);
+const PricingComponent = ({ productId, product }: { productId: string, product : any }) => {
+  const [productPricing, setProductPricing] = useState<any>([]);
+  const { isLoading, isError, error, data }: any =
+    useFetchProductPricing(productId);
+
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      setProductPricing(data.data.data);
+      console.log("Product Pricing ", productPricing)
+    }
+  }, [isLoading, isError, data]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    return <ShowErrorDialog error={error.message} />;
+  }
+
   
+
   return (
     <div>
       <Container
@@ -42,24 +58,25 @@ const PricingComponent = ({ pricing, product }: { pricing: any[], product : Prod
       </Container>
       <Container maxWidth="md" component="main">
         <Grid container spacing={5} alignItems="center">
-          {pricing.map((price: any) => (
+          {productPricing.map((price: any) => (
             <Grid
-            item
-            xs={12}
-            md={4}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Card
-              sx={{
-                height: "100%",
-                width : "100%",
-                display: "flex",
-                flexDirection: "column",
-              }}
+              item
+              xs={12}
+              md={4}
+              key={price.id}
+              justifyContent="center"
+              alignItems="center"
             >
-            <ShowPriceTable price = { price } productId = {product.id} />
-            </Card>
+              <Card
+                sx={{
+                  height: "100%",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <ShowPriceTable price={price} product={product} productId={ productId } />
+              </Card>
             </Grid>
           ))}
         </Grid>

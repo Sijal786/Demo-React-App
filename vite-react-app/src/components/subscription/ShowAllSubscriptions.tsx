@@ -159,7 +159,7 @@ const ShowAllSubscriptions = () => {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    {subscription.status == "incomplete" && (
+                    {subscription.status !== "cancel" && (
                       <Button
                         variant="contained"
                         color="primary"
@@ -171,7 +171,7 @@ const ShowAllSubscriptions = () => {
                         Cancel
                       </Button>
                     )}
-                    {subscription.status == "incomplete" && (
+                    {subscription.status !== "cancel" && (
                       <Button
                         variant="contained"
                         color="primary"

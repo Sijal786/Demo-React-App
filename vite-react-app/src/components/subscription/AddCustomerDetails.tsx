@@ -8,93 +8,124 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
-import { styled } from '@mui/system';
-import Alert from '@mui/material/Alert';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useEffect } from "react";
 import setCustomerCredentialsInLocalStorage from "../../shared/helper/setCustomerCredentialsInLocalStorage";
-
-
+import isCustomerExisted from "../../shared/helper/isCustomerExisted";
 import Stripe from "stripe";
-
+import { useFetchCustomers } from "../../hooks/useFetchCustomers";
+import Loading from "../../shared/components/Loading";
+import ShowAlert from "../../shared/components/ShowAlert";
+import ShowDialog from "../../shared/dialogs/ShowDialog";
+import isAuthenticated from "../../shared/helper/isAuthenticated";
+import { useNavigate } from "react-router-dom";
+import { Routes } from "../../shared/routes/Routes";
 
 const defaultTheme = createTheme();
-const stripe2 = new Stripe('sk_test_51ObKZ9EVITF2DHVDd0JdpYldyhA0KprTa0SCVDpbYEvYgcmHA2U4D5D1GhNK6Jmkx2KlMJx5AbqJg6AK4bYdfy8N00oYG9nrmT');
+const stripe2 = new Stripe(
+  "sk_test_51ObKZ9EVITF2DHVDd0JdpYldyhA0KprTa0SCVDpbYEvYgcmHA2U4D5D1GhNK6Jmkx2KlMJx5AbqJg6AK4bYdfy8N00oYG9nrmT"
+);
 
-const registerCustomers = async (name: string, email: string, phone: string) => {
-        
-  const result  = await stripe2.customers.create({
+const registerCustomers = async (
+  name: string,
+  email: string,
+  phone: string
+) => {
+  const result = await stripe2.customers.create({
     name: name,
     email: email,
-    phone : phone
+    phone: phone,
   });
-      return result;
-    };
-      
-   
-   
+  return result;
+};
 
-const AddCutomerDetails = () => {
+const AddCutomerDetails = ({ price, productId }: any) => {
+  const [successStatus, setSuccessStatus] = useState({
+    isSuccessAlert: false,
+    isErrorAlert: false,
+    isLoading: false,
+  });
 
-    const [successStatus, setSuccessStatus] = useState({
-        isSuccessAlert : false, 
-        isLoading : false
-    });
+  const navigate = useNavigate();
 
-    const CenteredAlert = styled('div')({
-        position: "absolute",
-        left: "50%",
-        bottom : "100px",
-        transform: "translate(-50%, -50%)",
-      });
+  const [customersData, setCustomersData] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
 
-      const CenteredLoadingBox = styled(Box)({
-        position: "absolute",
-        left: "50%",
-        top : "50%",
-        transform: "translate(-50%, -50%)",
-      });
+  const { isLoading, isError, data } = useFetchCustomers();
 
-      const hideAlertTimeout = setTimeout(() => {
-        setSuccessStatus(prevState => ({
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      setCustomersData(data.data.data);
+      console.log("CustomerData", customersData);
+    }
+  }, [isLoading, isError, data]);
+
+  const hideAlertTimeout = setTimeout(() => {
+    setSuccessStatus((prevState) => ({
+      ...prevState,
+      isSuccessAlert: false,
+      isErrorAlert: false,
+    }));
+  }, 5000);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+
+    if (isAuthenticated()) {
+      setSuccessStatus((prevState) => ({ ...prevState, isLoading: true }));
+
+      if (!!customersData) {
+        if (isCustomerExisted(customersData, name, email)) {
+          setSuccessStatus((prevState) => ({
             ...prevState,
-            isSuccessAlert: false,
+            isErrorAlert: true,
+            isLoading: false,
           }));
-      }, 5000);
 
-    
-      const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const name = formData.get("name") as string;
-        const email = formData.get("email") as string;
-        const phone = formData.get("phone") as string;
+          const customer: any = customersData.find(
+            (customer: any) => customer.name == name && customer.email == email
+          );
 
-        console.log("=========Form Data Name", name);
-        console.log("=========Form Data Email", email);
+          const customerCredentials = {
+            customerId: customer?.id,
+            customerName: customer?.name,
+            customerEmail: customer?.email,
+          };
 
-        setSuccessStatus(prevState => ({...prevState,
-            isLoading: true
-        }));
-        const result = await registerCustomers(name, email, phone);
-        console.log("===========Post Api Result" , result);
-        const customerCredentials = {
-          customerId: result.id,
-          customerName: result.name, 
-          customerEmail : result.email
+          setCustomerCredentialsInLocalStorage(customerCredentials);
+
+          navigate(Routes.Checkout, { state: { price, productId } });
+
+          console.log("The customer is registered");
+        } else {
+          const result = await registerCustomers(name, email, phone);
+          console.log("===========Post Api Result", result);
+
+          const customerCredentials = {
+            customerId: result.id,
+            customerName: result.name,
+            customerEmail: result.email,
+          };
+
+          setCustomerCredentialsInLocalStorage(customerCredentials);
+          setSuccessStatus((prevState) => ({
+            ...prevState,
+            isSuccessAlert: true,
+            isLoading: false,
+          }));
         }
+      }
+    } else {
+      setShowDialog(true);
+    }
 
-        setCustomerCredentialsInLocalStorage(customerCredentials);
-        setSuccessStatus(prevState => ({...prevState,
-        isSuccessAlert: true,
-        isLoading: false
-        }));
+    hideAlertTimeout;
+  };
 
-        hideAlertTimeout;
-        
-      };
-    
   return (
-   
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -158,23 +189,28 @@ const AddCutomerDetails = () => {
             </Button>
           </Box>
         </Box>
+        {successStatus.isErrorAlert && (
+          <ShowAlert
+            severity={"error"}
+            content="User with this email and passowrd already existed"
+          />
+        )}
         {successStatus.isSuccessAlert && (
-  <CenteredAlert>
-    <Alert severity="success">
-      The customer is registered successfully
-    </Alert>
-  </CenteredAlert>
-)}
-
+          <ShowAlert
+            severity={"success"}
+            content="The User is registered successfully"
+          />
+        )}
       </Container>
-      {successStatus.isLoading && (
-  <CenteredLoadingBox>
-  <CircularProgress />
-</CenteredLoadingBox>
-)}
+      {successStatus.isLoading && <Loading />}
+      {showDialog && (
+        <ShowDialog
+          title="Sign In"
+          content="Sign in to subscribe the offers "
+        />
+      )}
     </ThemeProvider>
-    
-  )
-}
+  );
+};
 
-export default AddCutomerDetails
+export default AddCutomerDetails;

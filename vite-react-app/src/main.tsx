@@ -15,7 +15,7 @@ import Checkout from "./components/subscription/Checkout.tsx";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools'
 import UpdateSubscription from "./components/subscription/UpdateSubscription.tsx";
-import ShowAlllSubscriptions from "./components/subscription/ShowAlllSubscriptions.tsx";
+import ShowAllSubscriptions from "./components/subscription/ShowAllSubscriptions.tsx";
 
 
 const router = createBrowserRouter([
@@ -61,7 +61,7 @@ const router = createBrowserRouter([
   },
   {
     path: Routes.ShowAllSubscriptions,
-    element: <ShowAlllSubscriptions />,
+    element: <ShowAllSubscriptions />,
     errorElement: <ErrorPage />,
   },
 ]);

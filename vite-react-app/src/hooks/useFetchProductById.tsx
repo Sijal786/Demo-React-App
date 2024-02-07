@@ -9,6 +9,6 @@ export const fetchProductById = (id: string) => {
   return axios.get(fetchProductByIdUrl, OPTIONS.stripeOptions);
 }
 
-export const useFetchProductsById = (id : string) => {
+export const useFetchProductById = (id : string) => {
   return useQuery('fetch-products-by-id', () => fetchProductById(id));
 }

@@ -12,50 +12,25 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Copyright } from "../../shared/components/Copyright";
 import { Routes } from "../../shared/routes/Routes";
+import setUserSignInInLocalStorage from "../../shared/helper/setUserSignInInLocalStaorage";
+import { loginUser } from "../../services/loginUser";
 
 const defaultTheme = createTheme();
 
 export default function Login() {
-  console.log("sign in ");
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
 
-    const options = {
-      method: "POST",
-      url: "https://jwt-bearer-auth1.p.rapidapi.com/login",
-      headers: {
-        "content-type": "application/json",
-        "Content-Type": "application/json",
-        "X-RapidAPI-Key": "5190cdf797mshe5f92a18298a6cbp1d1edfjsnaff3e2eee45e",
-        "X-RapidAPI-Host": "jwt-bearer-auth1.p.rapidapi.com",
-      },
-      data: JSON.stringify({
-        email: data.get("email"),
-        password: data.get("password"),
-      }),
-    };
-
-    try {
-      const response = await axios.request(options);
-      console.log(response.data.token);
-      localStorage.setItem("token", String(response.data.token));
-      localStorage.setItem("email", String(data.get("email")));
-      localStorage.setItem("password", String(data.get("password")));
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-    }
+    const token = await loginUser(data);
+    console.log("UserData ", token, data.get("email"));
+    setUserSignInInLocalStorage(token, data.get("email"));
+    navigate("/");
   };
 
   return (
@@ -116,15 +91,8 @@ export default function Login() {
               Sign In
             </Button>
             <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
               <Grid item>
-                <Link to = {Routes.SignUp} >
-                  Don't have an account? Sign Up
-                </Link>
+                <Link to={Routes.SignUp}>Don't have an account? Sign Up</Link>
               </Grid>
             </Grid>
           </Box>

@@ -10,11 +10,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { Routes } from "../../shared/routes/Routes";
 import { Copyright } from "../../shared/components/Copyright";
+import { signUpUser } from "../../services/signUpUser";
 
 
 const defaultTheme = createTheme();
@@ -26,32 +26,11 @@ export default function SignUp() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get("email");
-    const password = formData.get("password");
-    const options = {
-      method: "POST",
-      url: "https://jwt-bearer-auth1.p.rapidapi.com/register",
-      headers: {
-        "content-type": "application/json",
-        "X-RapidAPI-Key": "5190cdf797mshe5f92a18298a6cbp1d1edfjsnaff3e2eee45e",
-        "X-RapidAPI-Host": "jwt-bearer-auth1.p.rapidapi.com",
-      },
-      data: JSON.stringify({
-        email: email,
-        password: password,
-        role: uniqueRoleId,
-      }),
-    };
-
-    try {
-    const response = await axios.request(options);
+    
+    const response = await signUpUser(formData, uniqueRoleId);
     console.log(response);
-
     console.log("Sign up successfully");
     navigate(Routes.Login);
-    } catch (error) {
-      console.log(error);
-    }
     
   };
 

@@ -1,26 +1,25 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { useEffect } from 'react';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useEffect } from "react";
 
-export default function ShowErrorDialog() {
+export default function ShowErrorDialog({error} : any ) {
   const [open, setOpen] = React.useState(true);
 
   const handleClose = () => {
     setOpen(false);
-    };
-    
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            handleClose();
-        }, 3000); 
-        return () => clearTimeout(timer);
-    }, []);
-        
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <React.Fragment>
@@ -30,12 +29,15 @@ export default function ShowErrorDialog() {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle  variant='h4'  id="alert-dialog-title">
+        <DialogTitle variant="h4" id="alert-dialog-title">
           Oops!
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description" color="error">
             Something went wrong. Please try again
+          </DialogContentText>
+          <DialogContentText id="alert-dialog-description" color="error">
+            {error}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

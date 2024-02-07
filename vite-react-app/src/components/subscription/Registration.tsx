@@ -1,18 +1,28 @@
 import Typography from "@mui/material/Typography";
 import { AppBar } from "@mui/material";
 import { Toolbar } from "@mui/material";
-import { Stack, containerClasses } from "@mui/system";
-import { useContext, useState } from "react";
+import { Stack } from "@mui/system";
+import { useState } from "react";
 import { styled } from '@mui/system';
 import AddCutomerDetails from "./AddCustomerDetails";
 import AddCardDetails from "./AddCardDetails";
+import { useLocation } from "react-router-dom";
 
+
+interface State {
+  productId: string;
+  price: any;
+}
 
 export default function Registration() {
 
-  const [activeComponent, setActiveComponent] = useState("Register");
+  const location = useLocation();
+  const { state }: { state: State } = location;
+  const { price, productId } = state;
   
+  const [activeComponent, setActiveComponent] = useState("Register");
 
+  
 const StyledBar = styled('hr')({
   position: 'absolute',
   bottom: '-8px',
@@ -40,7 +50,7 @@ const StyledBar = styled('hr')({
       </Toolbar>
     </AppBar>
     <div>
-    {(activeComponent === 'Register')  ? <AddCutomerDetails /> : <AddCardDetails />}
+        {(activeComponent === 'Register') ? <AddCutomerDetails  price={ price} productId = {productId} /> : <AddCardDetails price={ price} productId = {productId}/>}
     </div>
     </>
   );

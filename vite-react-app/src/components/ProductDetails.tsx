@@ -4,34 +4,36 @@ import { Typography, Container } from "@mui/material";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useLocation } from "react-router-dom";
-import { getAPIResult } from "../services/axios";
 import PricingComponent from "./subscription/PricingComponent";
+import { useFetchProductById } from "../hooks/useFetchProductById";
+import Loading from "../shared/components/Loading";
+import ShowErrorDialog from "../shared/dialogs/ShowErrorDialog";
 
 const ProductDetails = () => {
+  
   const location = useLocation();
-  const product = location.state?.product;
-  console.log(product);
-  const productId = product.id;
-  console.log(productId);
+  const productId = location.state?.product.id;
+  console.log("Product id in Product Deatils Page", productId);
 
-  const [pricing, setPricing] = useState([]);
+  const [product, setProduct] = useState<any>({});
+  const { isLoading, data, error, isError }: any =
+    useFetchProductById(productId);
+  console.log(data?.data);
 
   useEffect(() => {
-    const fetchPricing = async () => {
-      try {
-        const priceUrl = `https://api.stripe.com/v1/prices?product=${productId}`;
-        const pricingData = await getAPIResult(priceUrl);
-        setPricing(pricingData);
-        console.log("Pricing Data", pricing);
-      } catch (error) {
-        console.error("Error fetching pricing:", error);
-      }
-    };
+    if (!isLoading && !isError && data) {
+      setProduct(data.data);
+    }
+  }, [isLoading, isError, data]);
 
-    fetchPricing();
-  }, [productId]);
+  if (isLoading) {
+    <Loading />;
+  }
+  if (isError) {
+    return <ShowErrorDialog error={error.message} />;
+  }
 
-  console.log("======Pricing", pricing);
+  console.log("Query Result of Product By id", product);
 
   const defaultTheme = createTheme();
 
@@ -48,7 +50,7 @@ const ProductDetails = () => {
         }}
       >
         <Typography variant="h2" align="center" fontWeight={100}>
-          {product.name}
+          {product?.name}
         </Typography>
         <Typography variant="h4" align="center" mt={4}>
           Swift & precise calculations, complete contract lifecycle coverage,
@@ -62,12 +64,15 @@ const ProductDetails = () => {
           align="center"
           color="text.secondary"
         >
-          {product.description}
+          {product?.description}
         </Typography>
-        <img src={product.images[0]} alt="This is my image" />
+        {product?.images ? (
+          <img src={product.images[0]} alt="Product" />
+        ) : (
+          <p>Loading image...</p>
+        )}
       </Container>
-      
-      <PricingComponent pricing={pricing} product={ product } />
+      <PricingComponent productId={productId} product = {product} />
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles
           styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}

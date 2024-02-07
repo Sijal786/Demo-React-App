@@ -8,12 +8,18 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
-import {Search, SearchIconWrapper ,StyledInputBase, } from "../shared/styled/Styled";
+import {
+  Search,
+  SearchIconWrapper,
+  StyledInputBase,
+} from "../shared/styled/Styled";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";
 import { Outlet } from "react-router-dom";
 import { SearchContext } from "./context/SearchContext";
+import unAuthenticateUser from "../shared/helper/unAuthenticateUser";
+
 
 const StyledToolbar = styled(Toolbar)(() => ({
   display: "flex",
@@ -41,12 +47,13 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }: any) => {
   const settings = ["Profile", "Login", "Logout"];
 
   const { search, setSearch } = useContext(SearchContext);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
 
-  
   function handleUserMenuClick(setting: string): void {
     if (setting == "Logout") {
-      localStorage.removeItem("token");
+      localStorage.clear();
       setIsAuthenticated(false);
     } else {
       naviagte(`/${setting}`);

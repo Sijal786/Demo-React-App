@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import MainPage from "./components/MainPage";
 import SearchProvider from "./components/context/SearchContext";
-import { useFetchProducts } from "./hooks/Products";
+import { useFetchProducts } from "./hooks/useFetchProducts";
 import { createContext } from "react";
 import Loading from "./shared/components/Loading";
 import ShowErrorDialog from "./shared/dialogs/ShowErrorDialog";
 
-
 export const ProductContext = createContext<any>(undefined);
 
-
 export default function App() {
+
+  const [products, setProducts] = useState([]);
+  const { isLoading, data, error, isError }: any = useFetchProducts();
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("token")
   );
-
-  const [products, setProducts] = useState([]);
-  const { isLoading, data, error, isError } = useFetchProducts();
 
   useEffect(() => {
     if (!isLoading && !isError && data) {
@@ -25,17 +23,13 @@ export default function App() {
     }
   }, [isLoading, isError, data]);
 
-  console.log("producys from app", products);
-
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
-  
   if (isError) {
-    return <ShowErrorDialog />
+    return <ShowErrorDialog error={error.message} />;
   }
-
 
   return (
     <ProductContext.Provider value={products}>

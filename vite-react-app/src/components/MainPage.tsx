@@ -14,20 +14,16 @@ import { useNavigate } from "react-router-dom";
 import { Routes } from "../shared/routes/Routes";
 import { useContext } from "react";
 import { ProductContext } from "../App";
-import { ProductContextType } from "../shared/interfaces/Interface";
 import { SearchContext } from "./context/SearchContext";
 
-export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
 
+export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
   const navigate = useNavigate();
   const { search } = useContext(SearchContext);
-  const products : any = useContext(ProductContext);
-  console.log("Context vallue ", products);
-  
-  console.log("products from page main", products);
+  const products: any = useContext(ProductContext);
 
   function handleLogout() {
-    localStorage.removeItem("token");
+    localStorage.clear();
     setIsAuthenticated(false);
   }
 
@@ -84,16 +80,24 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
             style={{ marginTop: "10px" }}
             spacing={4}
           >
-            {products?.filter((product : any) => product.name.toLowerCase().includes(search.toLowerCase()))
+            {products
+              ?.filter((product: any) =>
+                product.name.toLowerCase().includes(search.toLowerCase())
+              )
               .map((product: any) => (
-              <Grid key={product.id} item xs={12} sm={6} md={4}>
-                <Card
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                  }}
-                  onClick={() => navigate(`${Routes.ProductDetails.replace(":id", product.id)}`, { state: { product } })}
+                <Grid key={product.id} item xs={12} sm={6} md={4}>
+                  <Card
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    }}
+                    onClick={() =>
+                      navigate(
+                        `${Routes.ProductDetails.replace(":id", product.id)}`,
+                        { state: { product } }
+                      )
+                    }
                   >
                     <CardMedia
                       style={{ paddingTop: "56.25%" }}
@@ -110,14 +114,22 @@ export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
                         variant="contained"
                         color="primary"
                         size="small"
-                        onClick={() => navigate(`${Routes.ProductDetails.replace(":id", product.id)}`, { state: { product } })}
+                        onClick={() =>
+                          navigate(
+                            `${Routes.ProductDetails.replace(
+                              ":id",
+                              product.id
+                            )}`,
+                            { state: { product } }
+                          )
+                        }
                       >
                         Subscribe
                       </Button>
                     </CardActions>
                   </Card>
-              </Grid>
-            ))}
+                </Grid>
+              ))}
           </Grid>
         </Container>
       </main>
