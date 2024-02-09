@@ -3,7 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -12,26 +11,40 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { Routes } from "../../shared/routes/Routes";
-import { Copyright } from "../../shared/components/Copyright";
-import { signUpUser } from "../../services/signUpUser";
 
+import { Copyright } from "../../shared/components/Copyright";
+import { useState } from "react";
+import { useSignUpUser } from "../../hooks/useUserSignUp";
+import Loading from "../../shared/components/Loading";
+import { useEffect } from "react";
+import { Routes } from "../../shared/routes/Routes";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
   const uniqueRoleId = uuidv4();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { isLoading, error, isError, data, refetch }: any = useSignUpUser(
+    email,
+    password,
+    uniqueRoleId
+  );
+
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      console.log("Sign up successfully");
+      navigate(Routes.Login);
+      console.log(data);
+    }
+  }, [isLoading, isError, data]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    
-    const response = await signUpUser(formData, uniqueRoleId);
-    console.log(response);
-    console.log("Sign up successfully");
-    navigate(Routes.Login);
-    
+    const formData = new FormData();
+    refetch();
   };
 
   return (
@@ -68,6 +81,7 @@ export default function SignUp() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -78,7 +92,14 @@ export default function SignUp() {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
             />
+            {isError && (
+              <Typography variant="body1" color="error">
+                {" "}
+                {error?.response?.data?.errors}
+              </Typography>
+            )}
             <Button
               type="submit"
               fullWidth
@@ -89,7 +110,7 @@ export default function SignUp() {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/Login" variant="body2">
+                <Link to={Routes.Login}>
                   {"Already have an account? Sign In"}
                 </Link>
               </Grid>
@@ -98,6 +119,7 @@ export default function SignUp() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      {isLoading && <Loading />}
     </ThemeProvider>
   );
 }

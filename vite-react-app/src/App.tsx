@@ -10,7 +10,6 @@ import ShowErrorDialog from "./shared/dialogs/ShowErrorDialog";
 export const ProductContext = createContext<any>(undefined);
 
 export default function App() {
-
   const [products, setProducts] = useState([]);
   const { isLoading, data, error, isError }: any = useFetchProducts();
   const [isAuthenticated, setIsAuthenticated] = useState(

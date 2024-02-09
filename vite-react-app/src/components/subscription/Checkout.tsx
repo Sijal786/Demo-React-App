@@ -55,7 +55,6 @@ const Checkout = () => {
   useEffect(() => {
     if (!subscriptionLoading && !subscriptionIsError && subscriptionData) {
       console.log("The subscription is created successfully");
-      setSuccessAlert(true);
     }
   }, [subscriptionLoading, subscriptionIsError, subscriptionData]);
 
@@ -72,6 +71,7 @@ const Checkout = () => {
   const handleSubscribe = async () => {
     console.log("Button is clicked ");
     refetch();
+    setSuccessAlert(true);
   };
 
   const handleAllSubscriptions = () => {

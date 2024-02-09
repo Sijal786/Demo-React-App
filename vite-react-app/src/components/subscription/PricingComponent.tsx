@@ -26,8 +26,6 @@ const PricingComponent = ({ productId, product }: { productId: string, product :
     return <ShowErrorDialog error={error.message} />;
   }
 
-  
-
   return (
     <div>
       <Container
@@ -58,7 +56,7 @@ const PricingComponent = ({ productId, product }: { productId: string, product :
       </Container>
       <Container maxWidth="md" component="main">
         <Grid container spacing={5} alignItems="center">
-          {productPricing.map((price: any) => (
+          {productPricing?.map((price: any) => (
             <Grid
               item
               xs={12}

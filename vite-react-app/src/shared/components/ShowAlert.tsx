@@ -1,8 +1,11 @@
 import { styled } from "@mui/material";
 import { Alert } from "@mui/material";
 import { useEffect } from "react";
+import { useState } from "react";
 
-const ShowAlert = ({ severiy, content, setSuccessAlert }: any) => {
+const ShowAlert = ({ severity, content, setStatus }: any) => {
+  const [open, setOpen] = useState(true);
+
   const CenteredAlert = styled("div")({
     position: "absolute",
     left: "50%",
@@ -11,18 +14,19 @@ const ShowAlert = ({ severiy, content, setSuccessAlert }: any) => {
   });
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSuccessAlert(false);
+    setTimeout(() => {
+      // setStatus((prevState: any) => ({
+      //   ...prevState,
+      //   showSuccessAlert: false,
+      //   showAuthenticatedErrorAlert: false,
+      // }));
+      setOpen(false);
     }, 3000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [setSuccessAlert]);
+  }, [setStatus]);
 
   return (
     <CenteredAlert>
-      <Alert severity={severiy}>{content}</Alert>
+      {open && <Alert severity={severity}>{content}</Alert>}
     </CenteredAlert>
   );
 };

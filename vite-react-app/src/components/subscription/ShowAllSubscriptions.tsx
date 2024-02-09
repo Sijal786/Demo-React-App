@@ -12,53 +12,56 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../shared/routes/Routes";
+import { useFetchSubscriptions } from "../../hooks/usefetchSubscriptions";
+import { useCancelSubscription } from "../../hooks/useCancelSubscription";
 
-const stripe2 = new Stripe(
-  "sk_test_51ObKZ9EVITF2DHVDd0JdpYldyhA0KprTa0SCVDpbYEvYgcmHA2U4D5D1GhNK6Jmkx2KlMJx5AbqJg6AK4bYdfy8N00oYG9nrmT"
-);
 
 const ShowAllSubscriptions = () => {
   const { customerId } = getCustomerCredentialsFromLocalStorage();
-  const [subscriptions, setSubscriptions] = useState<any>();
+  const { customerName, customerEmail } = getCustomerCredentialsFromLocalStorage();
   const navigate = useNavigate();
-  const { customerName, customerEmail }: any =
-    getCustomerCredentialsFromLocalStorage();
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [subscriptionId, setSubscriptionId] = useState("");
+ 
 
-  const fetchSubscriptions = async () => {
-    try {
-      const subscriptions = await stripe2.subscriptions.list({
-        customer: customerId,
-        status: "all",
-      });
-      setSubscriptions(subscriptions.data);
-    } catch (error) {
-      console.error("Error fetching subscriptions:", error);
-    }
+  const { isLoading, error, isError, data } : any= useFetchSubscriptions(customerId);
+
+  const { refetch : cancelSubscriptionRefetch } = useCancelSubscription(subscriptionId);
+
+  const handleCancelSubscription = async (subscriptionId: string) => {
+    setSubscriptionId(subscriptionId);
+    console.log("from handleCancel", subscriptionId);
+    cancelSubscriptionRefetch();
   };
 
   useEffect(() => {
-    fetchSubscriptions();
-  }, [customerId]);
+    if (!isLoading && !isError && data) {
+      setSubscriptions(data.data.data);
+      setSubscriptionId(subscriptionId);
+      console.log("from useEffect", subscriptionId);
+      console.log("Subscriptions updates ", data.data.data);
+    }
+  }, [isLoading, isError, data, handleCancelSubscription]);
 
-  console.log("Subscriptions ", subscriptions);
+  if (isLoading) {
+    return <h2>Loading</h2>;
+  }
 
-  const handleCancelSubscription = async (subscriptionId: string) => {
-    const cancelSubscription = await stripe2?.subscriptions.cancel(
-      subscriptionId
+  if (isError) {
+    return <h2>{error.message}</h2>;
+  }
+
+
+  const handleResumeSubscription = async( subscriptionId : string) => {
+    console.log("from handle", subscriptionId);
+    const resumeSubscription = await stripe2?.subscriptions.resume(
+      subscriptionId,
+      {
+        billing_cycle_anchor: 'now',
+      }
     );
-    console.log("------Cancel Subscription", cancelSubscription);
-  };
-
-  // const handleResumeSubscription = async( subscriptionId : string) => {
-  //   console.log("from handle", subscriptionId);
-  //   const resumeSubscription = await stripe2?.subscriptions.resume(
-  //     subscriptionId,
-  //     {
-  //       billing_cycle_anchor: 'now',
-  //     }
-  //   );
-  //   console.log("Resume Sunscription", resumeSubscription)
-  // }
+    console.log("Resume Sunscription", resumeSubscription)
+  }
 
   const handleUpdateSubscription = async (subscription: any) => {
     console.log("Subsription from update Subscription ", subscription);
@@ -66,6 +69,7 @@ const ShowAllSubscriptions = () => {
       state: { subscription: subscription },
     });
   };
+
 
   return (
     <div>
@@ -91,8 +95,7 @@ const ShowAllSubscriptions = () => {
       </Grid>
       <Container maxWidth="md" component="main">
         <Grid container spacing={5} alignItems="center">
-          {subscriptions &&
-            subscriptions.map((subscription: any) => (
+          {subscriptions?.map((subscription: any) => (
               <Grid
                 item
                 xs={12}
@@ -192,8 +195,8 @@ const ShowAllSubscriptions = () => {
                       </Button>
                     )}
                   </CardActions>
-                </Card>
-              </Grid>
+                </Card> 
+               </Grid>
             ))}
         </Grid>
       </Container>

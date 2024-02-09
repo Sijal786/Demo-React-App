@@ -17,20 +17,39 @@ import { Copyright } from "../../shared/components/Copyright";
 import { Routes } from "../../shared/routes/Routes";
 import setUserSignInInLocalStorage from "../../shared/helper/setUserSignInInLocalStaorage";
 import { loginUser } from "../../services/loginUser";
+import { useLoginUser } from "../../hooks/useUserLogin";
+import { useState } from "react";
+import { useEffect } from "react";
+import Loading from "../../shared/components/Loading";
+import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
 
 const defaultTheme = createTheme();
 
 export default function Login() {
+  const [email, setEmail] = useState<any>("");
+  const [password, setPassword] = useState<any>("");
+
   const navigate = useNavigate();
+
+  const { isLoading, isError, error, data, refetch }: any = useLoginUser(
+    email,
+    password
+  );
+
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      console.log("isError", error);
+      console.log("Data", data?.data.token);
+      console.log("UserData ", data?.data.token, email);
+      setUserSignInInLocalStorage(data?.data.token, email);
+      navigate("/");
+    }
+  }, [isLoading, isError, data]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-
-    const token = await loginUser(data);
-    console.log("UserData ", token, data.get("email"));
-    setUserSignInInLocalStorage(token, data.get("email"));
-    navigate("/");
+    const formData = new FormData();
+    refetch();
   };
 
   return (
@@ -60,6 +79,7 @@ export default function Login() {
           >
             <TextField
               margin="normal"
+              onChange={(e) => setEmail(e.target.value)}
               required
               fullWidth
               id="email"
@@ -70,6 +90,7 @@ export default function Login() {
             />
             <TextField
               margin="normal"
+              onChange={(e) => setPassword(e.target.value)}
               required
               fullWidth
               name="password"
@@ -78,6 +99,12 @@ export default function Login() {
               id="password"
               autoComplete="current-password"
             />
+            {isError && (
+              <Typography variant="body1" color="error">
+                {" "}
+                {error?.response.data.errors}
+              </Typography>
+            )}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -99,6 +126,7 @@ export default function Login() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      {isLoading && <Loading />}
     </ThemeProvider>
   );
 }

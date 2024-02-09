@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import Stripe from "stripe";
 import { useEffect } from "react";
 import ShowPriceTable from "./ShowPriceTable";
 import { Button, Grid, Container, Typography, Card } from "@mui/material";
 import { useFetchProductPricing } from "../../hooks/useFetchPricing";
 import { useFetchProductById } from "../../hooks/useFetchProductById";
+import { useUpdateSubscriptions } from "../../hooks/useUpdateSubscription";
 import ShowAlert from "../../shared/components/ShowAlert";
 
 const UpdateSubscription = () => {
@@ -16,11 +16,10 @@ const UpdateSubscription = () => {
   console.log("From Update Subscription product id", subscription.plan.product);
   const [productPricing, setProductPricing] = useState<any>([]);
   const [currentPriceIndex, setCurrentPriceIndex] = useState(0);
+  const [currentPlan, setCurrentPlan] = useState("");
   const [product, setProduct] = useState({});
-
-  const stripe2 = new Stripe(
-    "sk_test_51ObKZ9EVITF2DHVDd0JdpYldyhA0KprTa0SCVDpbYEvYgcmHA2U4D5D1GhNK6Jmkx2KlMJx5AbqJg6AK4bYdfy8N00oYG9nrmT"
-  );
+  const itemId = subscription.items.data[0].id;
+  const [successAlert, setSuccessAlert] = useState(false);
 
   const {
     isLoading: pricingLoading,
@@ -36,60 +35,56 @@ const UpdateSubscription = () => {
     data: productData,
   } = useFetchProductById(subscription.plan.product);
 
+  const {
+    isLoading: updateSubscriptionLoading,
+    isError: updateSubscriptionError,
+    error: updateSubscriptionErrorData,
+    data: updateSubscriptionData,
+    refetch: updateSubscriptionRefetch,
+  } = useUpdateSubscriptions(itemId, currentPlan, subscription.id);
+
+  const handleUpgrade = () => {
+    if (productPricing.length > 0) {
+      setCurrentPriceIndex(
+        (prevCurrentPriceIndex) =>
+          (prevCurrentPriceIndex + 1) % productPricing.length
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (productPricing.length > 0) {
+      console.log("current Index---------------", currentPriceIndex);
+      setCurrentPlan(productPricing[currentPriceIndex]?.id);
+      console.log("Current Plan", currentPlan);
+    }
+  }, [productPricing, currentPriceIndex, handleUpgrade]);
+
   useEffect(() => {
     if (!pricingLoading && !pricingError && pricingData) {
       setProductPricing(pricingData.data.data);
-      console.log("Product Pricing from upgrade ", pricingData.data.data);
     }
   }, [pricingLoading, pricingError, pricingData]);
 
   useEffect(() => {
     if (!productLoading && !productError && productData) {
       setProduct(productData.data);
-      console.log("Product from upgrade ", productData.data);
     }
   }, [productLoading, productError, productData]);
 
-  useEffect(() => {
-    if (productPricing.length > 0) {
-      setCurrentPriceIndex(0);
-    }
-  }, [productPricing, product]);
-
-  console.log("Pricing from update subscription", productPricing);
-
-  const handleUpgrade = () => {
-    const nextIndex = (currentPriceIndex + 1) % productPricing.length;
-    setCurrentPriceIndex(nextIndex);
-  };
+  if (productLoading && pricingLoading && updateSubscriptionLoading) {
+    return <h2> Loading </h2>;
+  }
+  if (productError && pricingError) {
+    return <h2> Error </h2>;
+  }
 
   const handleUpdateSubscription = async () => {
-    const itemId = subscription.items.data[0].id;
-    const currentPriceId = productPricing[currentPriceIndex].id;
-    console.log("Subscription from handle update Item ", itemId);
-    console.log(
-      "Subscription from handle update current price",
-      currentPriceId
-    );
-
-    const updateSubscription = await stripe2?.subscriptions.update(
-      subscription.id,
-      {
-        items: [
-          {
-            id: itemId,
-            plan: productPricing[currentPriceIndex].id,
-          },
-        ],
-      }
-    );
-    console.log(updateSubscription);
+    updateSubscriptionRefetch();
+    console.log(updateSubscriptionData);
+    setSuccessAlert(true);
     console.log("The price is updated successfully");
-    return <ShowAlert severity = "success" content = "The subscription is updated successfully" />
   };
-
-  console.log("Current Price ", productPricing[currentPriceIndex]);
-  console.log("Product from Update Snscription", product);
 
   return (
     <>
@@ -164,6 +159,13 @@ const UpdateSubscription = () => {
             </Grid>
           ))}
         </Grid>
+        {successAlert && (
+          <ShowAlert
+            severity="success"
+            content="The subscription is updated successfully"
+            setSuccessAlert={setSuccessAlert}
+          />
+        )}
       </Container>
     </>
   );

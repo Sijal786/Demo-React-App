@@ -5,21 +5,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useEffect } from "react";
 
-export default function ShowErrorDialog({error} : any ) {
+export default function ShowErrorDialog({ error }: any) {
   const [open, setOpen] = React.useState(true);
 
   const handleClose = () => {
     setOpen(false);
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleClose();
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <React.Fragment>

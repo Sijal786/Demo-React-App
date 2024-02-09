@@ -17,7 +17,6 @@ const ShowPriceTable = ({ price, product, productId }: any) => {
   console.log("Price from Show Price Table ", price);
 
   const handleSubscribe = async () => {
-    
     if (!!localStorage.getItem("CustomerID")) {
       navigate(Routes.Checkout, { state: { price, productId } });
       console.log("The customer exist ");
@@ -25,7 +24,6 @@ const ShowPriceTable = ({ price, product, productId }: any) => {
       console.log("The customer does not exist");
       navigate(Routes.Register, { state: { price, productId } });
     }
-    
   };
 
   return (
@@ -60,9 +58,7 @@ const ShowPriceTable = ({ price, product, productId }: any) => {
           </Grid>
         </Grid>
       </CardContent>
-      <CardActions
-        sx={{ justifyContent: "center", marginBottom: "10px" }}
-      >
+      <CardActions sx={{ justifyContent: "center", marginBottom: "10px" }}>
         <Button
           fullWidth
           variant="contained"
@@ -73,7 +69,6 @@ const ShowPriceTable = ({ price, product, productId }: any) => {
         </Button>
       </CardActions>
       <br />
-      
     </>
   );
 };

@@ -10,13 +10,11 @@ import Registration from "./components/subscription/Registration.tsx";
 import App from "./App.tsx";
 import { Routes } from "./shared/routes/Routes.tsx";
 import ProductDetails from "./components/ProductDetails.tsx";
-import { CartProvider } from "./components/context/CartContext.tsx";
 import Checkout from "./components/subscription/Checkout.tsx";
 import { QueryClientProvider, QueryClient } from "react-query";
-import { ReactQueryDevtools } from 'react-query/devtools'
+import { ReactQueryDevtools } from "react-query/devtools";
 import UpdateSubscription from "./components/subscription/UpdateSubscription.tsx";
 import ShowAllSubscriptions from "./components/subscription/ShowAllSubscriptions.tsx";
-
 
 const router = createBrowserRouter([
   {
@@ -71,10 +69,9 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <RouterProvider router={router} />
-      </CartProvider>
-      <ReactQueryDevtools initialIsOpen = {false} position = 'bottom-right' />
-      </QueryClientProvider>
+      <RouterProvider router={router} />
+
+      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+    </QueryClientProvider>
   </React.StrictMode>
 );
