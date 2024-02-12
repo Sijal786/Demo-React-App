@@ -13,15 +13,13 @@ import Loading from "../../shared/components/Loading";
 import ShowAlert from "../../shared/components/ShowAlert";
 import ShowDialog from "../../shared/dialogs/ShowDialog";
 import isAuthenticated from "../../shared/helper/isAuthenticated";
-import { useNavigate } from "react-router-dom";
-import { Routes } from "../../shared/routes/Routes";
 import { useCreateCustomers } from "../../hooks/useCreateCustomers";
 import { useEffect } from "react";
+import setItemInLocalStorage from "../../shared/helper/setItemInLocalStorage";
 
 const defaultTheme = createTheme();
 
-const AddCutomerDetails = ({ price, productId }: any) => {
-  console.log("jelooppp");
+const AddCutomerDetails = () => {
   const [status, setStatus] = useState({
     showSuccessAlert: false,
     showAuthenticatedErrorAlert: false,
@@ -33,21 +31,26 @@ const AddCutomerDetails = ({ price, productId }: any) => {
     phone: "",
   });
 
-  const { isLoading, isError, error, data, refetch }: any =
-    useCreateCustomers(customerCredentials);
+  const {
+    mutate: addCustomerData,
+    isError,
+    error,
+    isLoading,
+    data,
+  }: any = useCreateCustomers();
+
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      console.log(data);
+      console.log(data?.data?.id);
+      setItemInLocalStorage("CustomerID", data?.data?.id);
+    }
+  }, [isLoading, isError, data]);
 
   // const [customersData, setCustomersData] = useState([]);
   // const [showDialog, setShowDialog] = useState(false);
 
   // const { isLoading, isError, data } = useFetchCustomers();
-
-  const hideAlertTimeout = setTimeout(() => {
-    setStatus((prevState) => ({
-      ...prevState,
-      showSuccessAlert: false,
-      showAuthenticatedErrorAlert: false,
-    }));
-  }, 5000);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -64,8 +67,12 @@ const AddCutomerDetails = ({ price, productId }: any) => {
     const email = formData.get("email") as string;
     const phone = formData.get("phone") as string;
 
+    console.log("These are customer credentials ", customerCredentials);
+
     if (isAuthenticated()) {
-      refetch();
+      addCustomerData(customerCredentials);
+      console.log("current ", data);
+      console.log("current ", data?.data?.id);
       if (isError) {
         return (
           <ShowAlert
@@ -75,7 +82,8 @@ const AddCutomerDetails = ({ price, productId }: any) => {
         );
       } else {
         setCustomerCredentialsInLocalStorage(customerCredentials);
-        console.log("The customer is registered");
+
+        console.log("The customer is registered", customerCredentials);
         setStatus((prevState) => ({
           ...prevState,
           showSuccessAlert: true,
@@ -138,9 +146,6 @@ const AddCutomerDetails = ({ price, productId }: any) => {
 
     // hideAlertTimeout;
   };
-
-  console.log(customerCredentials);
-  console.log(error);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -234,26 +239,3 @@ const AddCutomerDetails = ({ price, productId }: any) => {
 };
 
 export default AddCutomerDetails;
-
-{
-  /* {status.isErrorAlert && (
-          <ShowAlert
-            severity={"error"}
-            content="User with this email and passowrd already existed"
-          />
-        )}
-        {status.isSuccessAlert && (
-          <ShowAlert
-            severity={"success"}
-            content="The User is registered successfully"
-          />
-        )}
-      
-      {status.isLoading && <Loading />}
-      {showDialog && (
-        <ShowDialog
-          title="Sign In"
-          content="Sign in to subscribe the offers "
-        />
-      )} */
-}

@@ -16,40 +16,51 @@ import { useNavigate } from "react-router-dom";
 import { Copyright } from "../../shared/components/Copyright";
 import { Routes } from "../../shared/routes/Routes";
 import setUserSignInInLocalStorage from "../../shared/helper/setUserSignInInLocalStaorage";
-import { loginUser } from "../../services/loginUser";
 import { useLoginUser } from "../../hooks/useUserLogin";
 import { useState } from "react";
 import { useEffect } from "react";
 import Loading from "../../shared/components/Loading";
 import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
+import { postAPIResult } from "../../services/axios";
+import { URLS } from "../../services/URLS";
+import { loginUser } from "../../services/loginUser";
 
 const defaultTheme = createTheme();
 
 export default function Login() {
   const [email, setEmail] = useState<any>("");
   const [password, setPassword] = useState<any>("");
+  const [isError, setIsError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const { isLoading, isError, error, data, refetch }: any = useLoginUser(
-    email,
-    password
-  );
+  // const { isLoading, isError, error, data, mutate }: any = useLoginUser(onSuccess);
 
-  useEffect(() => {
-    if (!isLoading && !isError && data) {
-      console.log("isError", error);
-      console.log("Data", data?.data.token);
-      console.log("UserData ", data?.data.token, email);
-      setUserSignInInLocalStorage(data?.data.token, email);
-      navigate("/");
-    }
-  }, [isLoading, isError, data]);
+  // useEffect(() => {
+  //   if (!isLoading && !isError && data) {
+  //     console.log("isError", error);
+  //     console.log("Data", data?.data.token);
+  //     console.log("UserData ", data?.data.token, email);
+  //     setUserSignInInLocalStorage(data?.data.token, email);
+  //
+  //   }
+  // }, [isLoading, isError, data]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData();
-    refetch();
+    try {
+      setIsLoading(true);
+      const token = await loginUser(email, password);
+      setUserSignInInLocalStorage(token, email);
+      setIsLoading(false);
+      navigate("/");
+    } catch (error: any) {
+      console.log("My error", error);
+      setIsError(error.response.data.errors);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -99,10 +110,10 @@ export default function Login() {
               id="password"
               autoComplete="current-password"
             />
-            {isError && (
+            {!!isError && (
               <Typography variant="body1" color="error">
                 {" "}
-                {error?.response.data.errors}
+                {isError}
               </Typography>
             )}
             <FormControlLabel

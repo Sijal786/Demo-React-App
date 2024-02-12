@@ -17,7 +17,7 @@ const ShowPriceTable = ({ price, product, productId }: any) => {
   console.log("Price from Show Price Table ", price);
 
   const handleSubscribe = async () => {
-    if (!!localStorage.getItem("CustomerID")) {
+    if (((!!localStorage.getItem("CustomerID")) && !!localStorage.getItem("PaymentMethod"))) {
       navigate(Routes.Checkout, { state: { price, productId } });
       console.log("The customer exist ");
     } else {

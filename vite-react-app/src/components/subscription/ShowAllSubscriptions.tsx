@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../shared/routes/Routes";
-import { useFetchSubscriptions } from "../../hooks/usefetchSubscriptions";
+import { useFetchSubscriptions } from "../../hooks/useFetchSubscriptions";
 import { useCancelSubscription } from "../../hooks/useCancelSubscription";
 
 
@@ -52,16 +52,16 @@ const ShowAllSubscriptions = () => {
   }
 
 
-  const handleResumeSubscription = async( subscriptionId : string) => {
-    console.log("from handle", subscriptionId);
-    const resumeSubscription = await stripe2?.subscriptions.resume(
-      subscriptionId,
-      {
-        billing_cycle_anchor: 'now',
-      }
-    );
-    console.log("Resume Sunscription", resumeSubscription)
-  }
+  // const handleResumeSubscription = async( subscriptionId : string) => {
+  //   console.log("from handle", subscriptionId);
+  //   const resumeSubscription = await stripe2?.subscriptions.resume(
+  //     subscriptionId,
+  //     {
+  //       billing_cycle_anchor: 'now',
+  //     }
+  //   );
+  //   console.log("Resume Sunscription", resumeSubscription)
+  // }
 
   const handleUpdateSubscription = async (subscription: any) => {
     console.log("Subsription from update Subscription ", subscription);

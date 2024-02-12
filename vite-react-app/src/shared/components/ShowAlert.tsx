@@ -15,11 +15,6 @@ const ShowAlert = ({ severity, content, setStatus }: any) => {
 
   useEffect(() => {
     setTimeout(() => {
-      // setStatus((prevState: any) => ({
-      //   ...prevState,
-      //   showSuccessAlert: false,
-      //   showAuthenticatedErrorAlert: false,
-      // }));
       setOpen(false);
     }, 3000);
   }, [setStatus]);

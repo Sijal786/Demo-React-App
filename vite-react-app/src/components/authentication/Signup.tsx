@@ -6,12 +6,12 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-
 import { Copyright } from "../../shared/components/Copyright";
 import { useState } from "react";
 import { useSignUpUser } from "../../hooks/useUserSignUp";
@@ -23,28 +23,39 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const uniqueRoleId = uuidv4();
   const [email, setEmail] = useState("");
+  const uniqueRoleId = uuidv4();
   const [password, setPassword] = useState("");
 
-  const { isLoading, error, isError, data, refetch }: any = useSignUpUser(
-    email,
-    password,
-    uniqueRoleId
-  );
+  const onSuccess = () => {
+    console.log("Sign up successfully");
+    navigate(Routes.Login);
+  };
 
-  useEffect(() => {
-    if (!isLoading && !isError && data) {
-      console.log("Sign up successfully");
-      navigate(Routes.Login);
-      console.log(data);
-    }
-  }, [isLoading, isError, data]);
+  const onError = () => {
+    console.log(error?.response.data.errors);
+  };
+
+  const {
+    isLoading,
+    error,
+    isError,
+    mutate: signUpUser,
+  }: any = useSignUpUser(onSuccess, onError);
+
+  // useEffect(() => {
+  //   if (!isLoading && !isError && data) {
+  //     console.log("Sign up successfully");
+  //     navigate(Routes.Login);
+  //     console.log(data);
+  //   }
+  // }, [isLoading, isError, data]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData();
-    refetch();
+
+    signUpUser({ email, password, uniqueRoleId });
   };
 
   return (

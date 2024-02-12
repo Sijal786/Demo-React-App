@@ -17,11 +17,9 @@ import Stripe from "stripe";
 import getCustomerCredentialsFromLocalStorage from "../helper/getCustomerCredentialsFromLocalStorage";
 import { Routes } from "../routes/Routes";
 import { useNavigate } from "react-router-dom";
+import setItemInLocalStorage from "../helper/setItemInLocalStorage";
 
-
-const stripe2 = new Stripe(
-  "sk_test_51ObKZ9EVITF2DHVDd0JdpYldyhA0KprTa0SCVDpbYEvYgcmHA2U4D5D1GhNK6Jmkx2KlMJx5AbqJg6AK4bYdfy8N00oYG9nrmT"
-);
+const stripe2 = new Stripe(import.meta.env.VITE_STRIPE_SECRET_KEY);
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -32,11 +30,17 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const AddCardDialog = ({ handleClose, open, setOpen, price, productId }: any) => {
+const AddCardDialog = ({
+  handleClose,
+  open,
+  setOpen,
+  price,
+  productId,
+}: any) => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
-  const { customerId, customerName, customerEmail } =
+  const { customerId, customerName, customerEmail } : any =
     getCustomerCredentialsFromLocalStorage();
 
   console.log("========CustomerId from Add Card Dialog", customerId);
@@ -70,9 +74,11 @@ const AddCardDialog = ({ handleClose, open, setOpen, price, productId }: any) =>
 
     console.log(paymentMethod);
 
-    const paymentMethodId = paymentMethod?.paymentMethod?.id;
+    const paymentMethodId: any = paymentMethod?.paymentMethod?.id;
     console.log("========paymentMethodId", paymentMethodId);
     console.log("============Customer id", customerId);
+
+    setItemInLocalStorage("PaymentMethod", paymentMethodId);
 
     if (paymentMethodId) {
       const attachPaymentMethodToCustomer =
@@ -98,7 +104,6 @@ const AddCardDialog = ({ handleClose, open, setOpen, price, productId }: any) =>
 
     setOpen(false);
     navigate(Routes.Checkout, { state: { price, productId } });
-    
   };
 
   return (

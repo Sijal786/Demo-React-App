@@ -2,14 +2,13 @@ import { OPTIONS } from "../services/Options";
 import axios from "axios";
 import { URLS } from "./URLS";
 
-const options : any = OPTIONS.jwtOptions;
+const options: any = OPTIONS.jwtOptions;
 
-export async function loginUser(data: any) {
-
+export async function loginUser(email: any, password: any) {
   options.url = URLS.login;
   options.data = JSON.stringify({
-    email: data.get("email"),
-    password: data.get("password"),
+    email: email,
+    password: password,
   });
 
   try {
@@ -20,4 +19,3 @@ export async function loginUser(data: any) {
     throw error;
   }
 }
-

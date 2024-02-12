@@ -27,7 +27,8 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [successAlert, setSuccessAlert] = useState(false);
 
-  const { customerId } = getCustomerCredentialsFromLocalStorage();
+  const { customerId, paymentMethod } =
+    getCustomerCredentialsFromLocalStorage();
   console.log("Customer Id from Checkout ", customerId);
 
   const [product, setProduct] = useState<any>({});
@@ -43,8 +44,8 @@ const Checkout = () => {
     data: subscriptionData,
     error: subscriptionError,
     isError: subscriptionIsError,
-    refetch,
-  }: any = useCreateSubscription(customerId, price.id);
+    mutate: createSubscription,
+  }: any = useCreateSubscription();
 
   useEffect(() => {
     if (!productLoading && !productIsError && productData) {
@@ -69,8 +70,14 @@ const Checkout = () => {
   }
 
   const handleSubscribe = async () => {
+    const subscriptionData = {
+      customer: customerId,
+      items: [{ price: price.id }],
+      trial_end: "now",
+      default_payment_method: paymentMethod,
+    };
     console.log("Button is clicked ");
-    refetch();
+    createSubscription(subscriptionData);
     setSuccessAlert(true);
   };
 

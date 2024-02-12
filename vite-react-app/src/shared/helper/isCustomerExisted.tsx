@@ -1,15 +1,19 @@
-import { useFetchCustomers } from "../../hooks/useFetchCustomers";
-const { isLoading, isError, data } = useFetchCustomers();
-console.log("Fetching customers data", data?.data.data);
+import getCustomerCredentialsFromLocalStorage from "./getCustomerCredentialsFromLocalStorage";
 
-export default function isCustomerExisted(
-  customersData: any,
-  name: string,
-  email: string
-) {
-  const existedCustomer: any = data?.data.data.find(
-    (customer: any) => customer.name === name && customer.email === email
+const { email } = getCustomerCredentialsFromLocalStorage();
+
+export default function isCustomerExisted(customersData : any) {
+
+ 
+  const existedCustomer: any = customersData?.find(
+    (customer: any) => customer.email == email
   );
-  
-  return existedCustomer !== undefined;
+
+  if(!!existedCustomer) {
+    console.log("This Customer is already existed in stripe", existedCustomer);
+    return true;
+  } else {
+    return false
+  }
+
 }

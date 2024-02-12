@@ -1,7 +1,8 @@
-const setCustomerCredentialsInLocalStorage = (customerData : any ) => {
-    localStorage.setItem("CustomerID" , customerData.customerId);
-    localStorage.setItem("CustomerName" , customerData?.customerName);
-    localStorage.setItem("CustomerEmail" , customerData?.customerEmail);
-  }
+const setCustomerCredentialsInLocalStorage = ({email, name , phone} : any) => {
+
+  localStorage.setItem("CustomerName" , name);
+  localStorage.setItem("CustomerEmail" , email); 
+  localStorage.setItem("CustomerPhone" , phone);
+}
 
 export default setCustomerCredentialsInLocalStorage;
