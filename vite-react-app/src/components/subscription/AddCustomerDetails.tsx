@@ -13,7 +13,7 @@ import Loading from "../../shared/components/Loading";
 import ShowAlert from "../../shared/components/ShowAlert";
 import ShowDialog from "../../shared/dialogs/ShowDialog";
 import isAuthenticated from "../../shared/helper/isAuthenticated";
-import { useCreateCustomers } from "../../hooks/useCreateCustomers";
+import { useCreateCustomers } from "../../services/hooks/useCreateCustomers";
 import { useEffect } from "react";
 import setItemInLocalStorage from "../../shared/helper/setItemInLocalStorage";
 

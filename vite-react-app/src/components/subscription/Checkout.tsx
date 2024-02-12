@@ -8,10 +8,10 @@ import { Routes } from "../../shared/routes/Routes";
 import { useEffect } from "react";
 import Loading from "../../shared/components/Loading";
 import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
-import { useFetchProductById } from "../../hooks/useFetchProductById";
+import { useFetchProductById } from "../../services/hooks/useFetchProductById";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Stack } from "@mui/system";
-import { useCreateSubscription } from "../../hooks/useCreateSubscription";
+import { useCreateSubscription } from "../../services/hooks/useCreateSubscription";
 import ShowAlert from "../../shared/components/ShowAlert";
 import ShowDialog from "../../shared/dialogs/ShowDialog";
 
@@ -73,7 +73,6 @@ const Checkout = () => {
     const subscriptionData = {
       customer: customerId,
       items: [{ price: price.id }],
-      trial_end: "now",
       default_payment_method: paymentMethod,
     };
     console.log("Button is clicked ");
@@ -133,6 +132,7 @@ const Checkout = () => {
           setSuccessAlert={setSuccessAlert}
         />
       )}
+      {/* {subscriptionLoading && <Loading />} */}
     </Container>
   );
 };

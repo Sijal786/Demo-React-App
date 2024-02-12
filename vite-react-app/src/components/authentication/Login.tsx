@@ -16,14 +16,11 @@ import { useNavigate } from "react-router-dom";
 import { Copyright } from "../../shared/components/Copyright";
 import { Routes } from "../../shared/routes/Routes";
 import setUserSignInInLocalStorage from "../../shared/helper/setUserSignInInLocalStaorage";
-import { useLoginUser } from "../../hooks/useUserLogin";
 import { useState } from "react";
-import { useEffect } from "react";
 import Loading from "../../shared/components/Loading";
-import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
-import { postAPIResult } from "../../services/axios";
-import { URLS } from "../../services/URLS";
 import { loginUser } from "../../services/loginUser";
+
+
 
 const defaultTheme = createTheme();
 
@@ -35,7 +32,12 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  // const { isLoading, isError, error, data, mutate }: any = useLoginUser(onSuccess);
+  // const {
+  //   isLoading: loginUserLoading,
+  //   isError: loginUserError,
+  //   error: loginUserLoadingErrorData,
+  //   mutate : loginUser
+  // }: any = useLoginUser();
 
   // useEffect(() => {
   //   if (!isLoading && !isError && data) {

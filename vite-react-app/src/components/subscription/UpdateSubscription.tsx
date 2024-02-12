@@ -3,10 +3,11 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import ShowPriceTable from "./ShowPriceTable";
 import { Button, Grid, Container, Typography, Card } from "@mui/material";
-import { useFetchProductPricing } from "../../hooks/useFetchPricing";
-import { useFetchProductById } from "../../hooks/useFetchProductById";
-import { useUpdateSubscriptions } from "../../hooks/useUpdateSubscription";
+import { useFetchProductPricing } from "../../services/hooks/useFetchPricing";
+import { useFetchProductById } from "../../services/hooks/useFetchProductById";
+import { useUpdateSubscriptions } from "../../services/hooks/useUpdateSubscription";
 import ShowAlert from "../../shared/components/ShowAlert";
+import Loading from "../../shared/components/Loading";
 
 const UpdateSubscription = () => {
   const location = useLocation();
@@ -166,6 +167,7 @@ const UpdateSubscription = () => {
             setSuccessAlert={setSuccessAlert}
           />
         )}
+        {/* {updateSubscriptionLoading && <Loading />} */}
       </Container>
     </>
   );

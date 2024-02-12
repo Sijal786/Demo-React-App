@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { Copyright } from "../../shared/components/Copyright";
 import { useState } from "react";
-import { useSignUpUser } from "../../hooks/useUserSignUp";
+import { useSignUpUser } from "../../services/hooks/useUserSignUp";
 import Loading from "../../shared/components/Loading";
 import { useEffect } from "react";
 import { Routes } from "../../shared/routes/Routes";

@@ -5,12 +5,11 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useLocation } from "react-router-dom";
 import PricingComponent from "./subscription/PricingComponent";
-import { useFetchProductById } from "../hooks/useFetchProductById";
+import { useFetchProductById } from "../services/hooks/useFetchProductById";
 import Loading from "../shared/components/Loading";
 import ShowErrorDialog from "../shared/dialogs/ShowErrorDialog";
 
 const ProductDetails = () => {
-  
   const location = useLocation();
   const productId = location.state?.product.id;
   console.log("Product id in Product Deatils Page", productId);
@@ -72,7 +71,7 @@ const ProductDetails = () => {
           <p>Loading image...</p>
         )}
       </Container>
-      <PricingComponent productId={productId} product = {product} />
+      <PricingComponent productId={productId} product={product} />
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles
           styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}

@@ -18,6 +18,9 @@ import getCustomerCredentialsFromLocalStorage from "../helper/getCustomerCredent
 import { Routes } from "../routes/Routes";
 import { useNavigate } from "react-router-dom";
 import setItemInLocalStorage from "../helper/setItemInLocalStorage";
+import { useState } from "react";
+import ShowAlert from "../components/ShowAlert";
+import { useResumeSubscription } from "../../services/hooks/useResumeSubscription";
 
 const stripe2 = new Stripe(import.meta.env.VITE_STRIPE_SECRET_KEY);
 
@@ -40,12 +43,13 @@ const AddCardDialog = ({
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
-  const { customerId, customerName, customerEmail } : any =
+  const { customerId, customerName, customerEmail }: any =
     getCustomerCredentialsFromLocalStorage();
+  const [successAlert, setSuccessAlert] = useState(false);
 
-  console.log("========CustomerId from Add Card Dialog", customerId);
-  console.log("========CustomerId from Add Card Dialog", customerEmail);
-  console.log("========CustomerId from Add Card Dialog", customerName);
+  console.log("CustomerId from Add Card Dialog", customerId);
+  console.log("CustomerEmail from Add Card Dialog", customerEmail);
+  console.log("CustomerName from Add Card Dialog", customerName);
 
   const cardElementOptions = {
     iconStyle: "solid",
@@ -75,8 +79,8 @@ const AddCardDialog = ({
     console.log(paymentMethod);
 
     const paymentMethodId: any = paymentMethod?.paymentMethod?.id;
-    console.log("========paymentMethodId", paymentMethodId);
-    console.log("============Customer id", customerId);
+    console.log("-----------------paymentMethodId", paymentMethodId);
+    console.log("-----------------Customer id", customerId);
 
     setItemInLocalStorage("PaymentMethod", paymentMethodId);
 
@@ -86,7 +90,7 @@ const AddCardDialog = ({
           customer: customerId,
         });
       console.log(
-        "=========attachPaymentMethodToCustomer",
+        "-----------------attachPaymentMethodToCustomer",
         attachPaymentMethodToCustomer
       );
     } else {
@@ -103,6 +107,7 @@ const AddCardDialog = ({
     console.log("Add card functionality is completed");
 
     setOpen(false);
+    setSuccessAlert(true);
     navigate(Routes.Checkout, { state: { price, productId } });
   };
 
@@ -129,6 +134,13 @@ const AddCardDialog = ({
           <Button onClick={handleAddCard}>Add</Button>
         </DialogActions>
       </Dialog>
+      {successAlert && (
+        <ShowAlert
+          severity="success"
+          content="The subscription is cancelled"
+          setSuccessAlert={setSuccessAlert}
+        />
+      )}
     </React.Fragment>
   );
 };

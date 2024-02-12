@@ -16,62 +16,58 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import UpdateSubscription from "./components/subscription/UpdateSubscription.tsx";
 import ShowAllSubscriptions from "./components/subscription/ShowAllSubscriptions.tsx";
 
-const router = createBrowserRouter([
-  {
-    path: Routes.Home,
-    element: <App />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: Routes.Login,
-    element: <Login />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: Routes.SignUp,
-    element: <SignUp />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: Routes.MainPage,
-    element: <MainPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: Routes.Register,
-    element: <Registration />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: Routes.ProductDetails,
-    element: <ProductDetails />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: Routes.Checkout,
-    element: <Checkout />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: Routes.UpdateSubscription,
-    element: <UpdateSubscription />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: Routes.ShowAllSubscriptions,
-    element: <ShowAllSubscriptions />,
-    errorElement: <ErrorPage />,
-  },
-]);
+// const router = createBrowserRouter([
+//   {
+//     path: Routes.Home,
+//     element: <App />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: Routes.Login,
+//     element: <Login />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: Routes.SignUp,
+//     element: <SignUp />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: Routes.MainPage,
+//     element: <MainPage />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: Routes.Register,
+//     element: <Registration />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: Routes.ProductDetails,
+//     element: <ProductDetails />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: Routes.Checkout,
+//     element: <Checkout />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: Routes.UpdateSubscription,
+//     element: <UpdateSubscription />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: Routes.ShowAllSubscriptions,
+//     element: <ShowAllSubscriptions />,
+//     errorElement: <ErrorPage />,
+//   },
+// ]);
 
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-
-      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-    </QueryClientProvider>
+    <App />
   </React.StrictMode>
 );

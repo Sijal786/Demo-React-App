@@ -1,12 +1,18 @@
 import { Container, Grid, Typography, Card } from "@mui/material";
 import ShowPriceTable from "./ShowPriceTable";
-import { useFetchProductPricing } from "../../hooks/useFetchPricing";
+import { useFetchProductPricing } from "../../services/hooks/useFetchPricing";
 import { useState } from "react";
 import Loading from "../../shared/components/Loading";
 import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
 import { useEffect } from "react";
 
-const PricingComponent = ({ productId, product }: { productId: string, product : any }) => {
+const PricingComponent = ({
+  productId,
+  product,
+}: {
+  productId: string;
+  product: any;
+}) => {
   const [productPricing, setProductPricing] = useState<any>([]);
   const { isLoading, isError, error, data }: any =
     useFetchProductPricing(productId);
@@ -14,7 +20,7 @@ const PricingComponent = ({ productId, product }: { productId: string, product :
   useEffect(() => {
     if (!isLoading && !isError && data) {
       setProductPricing(data.data.data);
-      console.log("Product Pricing ", productPricing)
+      console.log("Product Pricing ", productPricing);
     }
   }, [isLoading, isError, data]);
 
@@ -73,7 +79,11 @@ const PricingComponent = ({ productId, product }: { productId: string, product :
                   flexDirection: "column",
                 }}
               >
-                <ShowPriceTable price={price} product={product} productId={ productId } />
+                <ShowPriceTable
+                  price={price}
+                  product={product}
+                  productId={productId}
+                />
               </Card>
             </Grid>
           ))}
