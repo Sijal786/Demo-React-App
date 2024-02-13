@@ -7,7 +7,6 @@ import { useFetchProductPricing } from "../../services/hooks/useFetchPricing";
 import { useFetchProductById } from "../../services/hooks/useFetchProductById";
 import { useUpdateSubscriptions } from "../../services/hooks/useUpdateSubscription";
 import ShowAlert from "../../shared/components/ShowAlert";
-import Loading from "../../shared/components/Loading";
 
 const UpdateSubscription = () => {
   const location = useLocation();

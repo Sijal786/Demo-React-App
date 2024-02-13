@@ -1,11 +1,15 @@
 export const Routes = {
   Home: "/",
   Login: "/Login",
-  SignUp: "/signup",
-  MainPage: "/mainpage",
+  Logout: "/Logout",
+  SignUp: "/Signup",
+  Products: "/products",
+  Blogs: "/Blogs",
   Register: "/register",
   ProductDetails: "/productdetails/:id",
-  Checkout : "/checkout",
+  Checkout: "/checkout",
   UpdateSubscription: "/updateSubscription",
-  ShowAllSubscriptions: "/showAllSubscriptions"
+  ShowAllSubscriptions: "/showAllSubscriptions",
 };
+
+export default Routes;

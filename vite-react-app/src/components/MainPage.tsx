@@ -11,11 +11,9 @@ import {
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useNavigate } from "react-router-dom";
-import { Routes } from "../shared/routes/Routes";
 import { useContext } from "react";
 import { ProductContext } from "../App";
 import { SearchContext } from "./context/SearchContext";
-
 
 export default function MainPage({ isAuthenticated, setIsAuthenticated }: any) {
   const navigate = useNavigate();
