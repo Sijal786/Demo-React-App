@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import Loading from "../../shared/components/Loading";
-import { Link } from "react-router-dom";
 import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
 import { useNavigate } from "react-router-dom";
 import Routes from "../../shared/routes/Routes";
@@ -67,7 +66,7 @@ const ShowProducts = () => {
               <Typography>{product.description}</Typography>
             </CardContent>
             <CardActions>
-              <Button
+              {/* <Button
                 variant="contained"
                 color="primary"
                 size="small"
@@ -79,7 +78,7 @@ const ShowProducts = () => {
                 }
               >
                 Subscribe
-              </Button>
+              </Button> */}
             </CardActions>
           </Card>
         </Grid>

@@ -1,4 +1,5 @@
-import * as React from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,40 +13,72 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { Copyright } from "../../shared/components/Copyright";
 import { useState } from "react";
-import { useSignUpUser } from "../../services/hooks/useUserSignUp";
+import { useSignUpUser } from "./services/useUserSignUp";
 import Loading from "../../shared/components/Loading";
 import { useEffect } from "react";
 import { Routes } from "../../shared/routes/Routes";
 import { useCreateCustomers } from "../../services/hooks/useCreateCustomers";
 import setItemInLocalStorage from "../../shared/helper/setItemInLocalStorage";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const defaultTheme = createTheme();
 
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Name is required")
+    .min(3, "Name must be at least 3 characters")
+    .max(17, "Name does not contain more than 17 characters"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    ),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
+});
+
 export default function SignUp() {
   const navigate = useNavigate();
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [email, setEmail] = useState("");
-  const uniqueRoleId = uuidv4();
   const [name, setName] = useState<any>("");
-  const [password, setPassword] = useState("");
+  const uniqueRoleId = uuidv4();
+
+  // const [email, setEmail] = useState("");
+  // const uniqueRoleId = uuidv4();
+
+  // const [password, setPassword] = useState("");
 
   const onSuccess = () => {
     console.log("Sign up successfully");
-    setItemInLocalStorage("CustomerName", name);
     navigate(Routes.Login);
   };
 
-  const onError = () => {
-    console.log(error?.response.data.errors);
-  };
+  // const onError = () => {
+  //   console.log(error?.response.data.errors);
+  // };
 
   const {
-    isLoading,
-    error,
+    isLoading: signUpUserLoading,
+    error: signUpUserErrorData,
     isError,
     mutate: signUpUser,
-  }: any = useSignUpUser(onSuccess, onError);
+  }: any = useSignUpUser(onSuccess);
 
   const {
     mutate: addCustomer,
@@ -57,24 +90,29 @@ export default function SignUp() {
 
   useEffect(() => {
     if (!addCustomerLoading && !addCustomerError && addCustomerData) {
-      console.log("Sign up successfully");
+      console.log("Add Customers successfully");
       navigate(Routes.Login);
       setItemInLocalStorage("CustomerID", addCustomerData?.data?.id);
+      setItemInLocalStorage("CustomerName", addCustomerData?.data?.name);
       setItemInLocalStorage("CustomerEmail", addCustomerData?.data?.email);
     }
-  }, [isLoading, isError, addCustomerData]);
+  }, [addCustomerLoading, isError, addCustomerData]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData();
-    signUpUser({ email, password, uniqueRoleId });
-    console.log(name, email);
-    const customerData = {
-      name: name,
-      email: email,
+  if (addCustomerLoading && signUpUserLoading) {
+    return <Loading />;
+  }
+
+  const onSubmit = async (data: any) => {
+    setIsLoading(true);
+    setError(null);
+    const userCredentials = {
+      email: data.email,
+      password: data.password,
+      role: uniqueRoleId,
     };
-    console.log("Customer Data ", customerData);
-    addCustomer(customerData);
+    console.log("I am sending", userCredentials);
+    signUpUser(userCredentials);
+    addCustomer({ name: data.name, email: data.email });
   };
 
   return (
@@ -93,39 +131,41 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {" "}
-            Sign Up{" "}
+            Sign Up
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             noValidate
             sx={{ mt: 1 }}
           >
             <TextField
               margin="normal"
-              onChange={(e) => setName(e.target.value)}
+              {...register("name")}
               required
               fullWidth
               id="name"
               label="Name"
-              name="name"
               autoComplete="name"
               autoFocus
+              error={errors.name ? true : false}
+              helperText={errors.name && errors.name.message}
             />
             <TextField
               margin="normal"
+              {...register("email")}
               required
               fullWidth
               id="email"
               label="Email Address"
-              name="email"
               autoComplete="email"
               autoFocus
-              onChange={(e) => setEmail(e.target.value)}
+              error={errors.email ? true : false}
+              helperText={errors.email && errors.email.message}
             />
             <TextField
               margin="normal"
+              {...register("password")}
               required
               fullWidth
               name="password"
@@ -133,12 +173,27 @@ export default function SignUp() {
               type="password"
               id="password"
               autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
+              error={errors.password ? true : false}
+              helperText={errors.password && errors.password.message}
             />
-            {isError && (
+            <TextField
+              margin="normal"
+              {...register("confirmPassword")}
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              autoComplete="current-password"
+              error={errors.confirmPassword ? true : false}
+              helperText={
+                errors.confirmPassword && errors.confirmPassword.message
+              }
+            />
+            {error && (
               <Typography variant="body1" color="error">
-                {" "}
-                {error?.response?.data?.errors}
+                {error}
               </Typography>
             )}
             <Button
@@ -147,18 +202,15 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign UP
+              Sign Up
             </Button>
             <Grid container>
               <Grid item>
-                <Link to={Routes.Login}>
-                  {"Already have an account? Sign In"}
-                </Link>
+                <Link to={Routes.Login}>Already have an account? Sign In</Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
       {isLoading && <Loading />}
     </ThemeProvider>

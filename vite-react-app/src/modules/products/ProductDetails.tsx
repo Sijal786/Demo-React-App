@@ -11,7 +11,7 @@ import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
 
 const ProductDetails = () => {
   const location = useLocation();
-  const productId = location.state?.product.id;
+  const productId = location?.state?.product.id;
   console.log("Product id in Product Deatils Page", productId);
 
   const [product, setProduct] = useState<any>({});
@@ -26,8 +26,9 @@ const ProductDetails = () => {
   }, [isLoading, isError, data]);
 
   if (isLoading) {
-    <Loading />;
+    return <Loading />;
   }
+
   if (isError) {
     return <ShowErrorDialog error={error.message} />;
   }
@@ -71,7 +72,7 @@ const ProductDetails = () => {
           <p>Loading image...</p>
         )}
       </Container>
-      <PricingComponent productId={productId} product={product} />
+      <PricingComponent product={product} />
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyles
           styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}

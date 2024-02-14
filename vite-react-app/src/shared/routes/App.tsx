@@ -1,4 +1,3 @@
-
 import Home from "../../modules/home/Home.tsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "../../layout/Layout.tsx";
@@ -9,6 +8,10 @@ import Login from "../../modules/authentication/Login.tsx";
 import SignUp from "../../modules/authentication/Signup.tsx";
 import ROUTES from "./Routes.tsx";
 import ProductDetails from "../../modules/products/ProductDetails.tsx";
+import Checkout from "../../modules/checkout/Checkout.tsx";
+import Protected from "./Protected.tsx";
+import AddCardDialog from "../../modules/checkout/AddCardDialog.tsx";
+import Profile from "../../modules/profile/Profile.tsx";
 
 export default function App() {
   const queryClient = new QueryClient();
@@ -24,7 +27,13 @@ export default function App() {
             <Route path={ROUTES.Logout} element={<Blogs />} />
             <Route path={ROUTES.Products} element={<Products />} />
             <Route path={ROUTES.ProductDetails} element={<ProductDetails />} />
+            <Route path={ROUTES.Profile} element={<Profile />} />
+            <Route path={ROUTES.AddCardDialog} element={<AddCardDialog />} />
             <Route path={ROUTES.Blogs} element={<Blogs />} />
+            <Route
+              path={ROUTES.Checkout}
+              element={<Protected Component={Checkout} />}
+            />
           </Routes>
         </Layout>
       </Router>

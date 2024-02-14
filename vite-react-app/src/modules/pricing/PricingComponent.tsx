@@ -5,17 +5,15 @@ import { useState } from "react";
 import Loading from "../../shared/components/Loading";
 import ShowErrorDialog from "../../shared/dialogs/ShowErrorDialog";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-const PricingComponent = ({
-  productId,
-  product,
-}: {
-  productId: string;
-  product: any;
-}) => {
+const PricingComponent = ({ product }: { product: any }) => {
+  console.log("This is the product from Pricing Component ", product);
+  const { id }: any = useParams();
+  console.log("params ", id);
+
   const [productPricing, setProductPricing] = useState<any>([]);
-  const { isLoading, isError, error, data }: any =
-    useFetchProductPricing(productId);
+  const { isLoading, isError, error, data }: any = useFetchProductPricing(id);
 
   useEffect(() => {
     if (!isLoading && !isError && data) {
@@ -55,9 +53,8 @@ const PricingComponent = ({
           color="text.secondary"
           component="p"
         >
-          Quickly build an effective pricing table for your potential customers
-          with this layout. It&apos;s built with default MUI components with
-          little customization.
+          We have several powerful plans to best fit your business needs. Choose
+          the one which works for you!
         </Typography>
       </Container>
       <Container maxWidth="md" component="main">
@@ -79,11 +76,7 @@ const PricingComponent = ({
                   flexDirection: "column",
                 }}
               >
-                <ShowPriceTable
-                  price={price}
-                  product={product}
-                  productId={productId}
-                />
+                <ShowPriceTable price={price} product={product} />
               </Card>
             </Grid>
           ))}

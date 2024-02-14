@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import isAuthenticated from "../helper/isAuthenticated";
 import { useNavigate } from "react-router-dom";
 
-const pages = ["Home", "Products", "Blog"];
+const pages = ["Home", "Products"];
 const settings = ["Profile", "Login", "Logout"];
 
 function ResponsiveAppBar() {
@@ -71,14 +71,16 @@ function ResponsiveAppBar() {
   function getNameInitials() {
     const fullName = localStorage.getItem("CustomerName"); // Example: "Sijal Fatima"
     const nameParts: any = fullName?.split(" ");
-    const firstNameInitial = nameParts[0].charAt(0);
-    const lastNameInitial = nameParts[nameParts.length - 1].charAt(0);
+    const firstNameInitial = nameParts[0].charAt(0).toUpperCase();
+    const lastNameInitial = nameParts[nameParts.length - 1]
+      .charAt(0)
+      .toUpperCase();
     const initials = `${firstNameInitial}${lastNameInitial}`;
     return initials;
   }
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -97,7 +99,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            AppexNW
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -173,7 +175,7 @@ function ResponsiveAppBar() {
                 {isAuthenticated() ? (
                   <Avatar>{getNameInitials()}</Avatar>
                 ) : (
-                  <Avatar alt="User Icon" src="/static/images/user-icon.png" />
+                  <Avatar alt="" src="/static/images/avatar/2.jpg" />
                 )}
               </IconButton>
             </Tooltip>

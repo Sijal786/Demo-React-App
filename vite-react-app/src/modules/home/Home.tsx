@@ -1,7 +1,3 @@
-import { useFetchProducts } from "../services/hooks/useFetchProducts";
-import { useState } from "react";
-import { useEffect } from "react";
-import Loading from "../shared/components/Loading";
 import styled from "styled-components";
 import ShowProducts from "../products/ShowProducts";
 import { Typography, Box, Grid, Container } from "@mui/material";

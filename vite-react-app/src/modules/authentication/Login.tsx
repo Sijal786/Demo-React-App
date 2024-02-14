@@ -1,43 +1,55 @@
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
+import * as yup from "yup";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import { Copyright } from "../../shared/components/Copyright";
 import { Routes } from "../../shared/routes/Routes";
+import Loading from "../../shared/components/Loading";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import setUserSignInInLocalStorage from "../../shared/helper/setUserSignInInLocalStaorage";
 import { useState } from "react";
-import Loading from "../../shared/components/Loading";
-import { loginUser } from "../../services/loginUser";
+import { loginUser } from "./services/loginUser";
 
 const defaultTheme = createTheme();
 
+const schema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    ),
+});
+
 export default function Login() {
-  const [email, setEmail] = useState<any>("");
-  
-  const [password, setPassword] = useState<any>("");
+  const navigate = useNavigate();
   const [isError, setIsError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData();
+  const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
-      const token = await loginUser(email, password);
-      setUserSignInInLocalStorage(token, email);
+      const token = await loginUser(data.email, data.password);
+      setUserSignInInLocalStorage(token, data.email);
       setIsLoading(false);
       navigate("/");
     } catch (error: any) {
@@ -63,30 +75,29 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            {" "}
-            Sign in{" "}
+            Login
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             noValidate
             sx={{ mt: 1 }}
           >
-            
             <TextField
               margin="normal"
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
               required
               fullWidth
               id="email"
               label="Email Address"
-              name="email"
               autoComplete="email"
               autoFocus
+              error={errors.email ? true : false}
+              helperText={errors.email && errors.email.message}
             />
             <TextField
               margin="normal"
-              onChange={(e) => setPassword(e.target.value)}
+              {...register("password")}
               required
               fullWidth
               name="password"
@@ -94,28 +105,26 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={errors.password ? true : false}
+              helperText={errors.password && errors.password.message}
             />
-            {!!isError && (
+
+            {isError && (
               <Typography variant="body1" color="error">
-                {" "}
                 {isError}
               </Typography>
             )}
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign IN
             </Button>
             <Grid container>
               <Grid item>
-                <Link to="/SignUp">Don't have an account? Sign Up</Link>
+                <Link to={Routes.SignUp}>Dont Have an account? Sign Up</Link>
               </Grid>
             </Grid>
           </Box>

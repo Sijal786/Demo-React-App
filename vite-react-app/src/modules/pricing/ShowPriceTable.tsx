@@ -5,26 +5,25 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "../../shared/routes/Routes";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Stack } from "@mui/system";
 
-const ShowPriceTable = ({ price, product, productId }: any) => {
+const ShowPriceTable = ({ price, product }: any) => {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   console.log("Price from Show Price Table ", price);
+  console.log("Product from Show Price Table ", product);
 
   const handleSubscribe = async () => {
-    if (
-      !!localStorage.getItem("CustomerID") &&
-      !!localStorage.getItem("PaymentMethod")
-    ) {
-      navigate(Routes.Checkout, { state: { price, productId } });
+    {
+      console.log("handeSubscribe id ", id);
+      navigate(Routes.Checkout, { state: { price, id } });
       console.log("The customer exist ");
-    } else {
-      console.log("The customer does not exist");
-      navigate(Routes.Register, { state: { price, productId } });
+      console.log("from Subscribe Product", product);
     }
   };
 
@@ -44,7 +43,8 @@ const ShowPriceTable = ({ price, product, productId }: any) => {
       </Typography>
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="h4" color="primary" align="center" gutterBottom>
-          {price?.unit_amount} / {price?.recurring?.interval}
+          {price.currency == "usd" ? "$" : price.currency} {price.unit_amount} /{" "}
+          {price.recurring.interval}
         </Typography>
         <Grid container justifyContent="center" alignItems="center" spacing={2}>
           <Grid item></Grid>
